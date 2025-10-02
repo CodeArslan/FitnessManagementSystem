@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FitnessManagementSystem.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessManagementSystem.Data
@@ -9,5 +10,6 @@ namespace FitnessManagementSystem.Data
             : base(options)
         {
         }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

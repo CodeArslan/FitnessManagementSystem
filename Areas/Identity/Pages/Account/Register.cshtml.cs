@@ -2,6 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using FitnessManagementSystem.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,14 +20,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 
 namespace FitnessManagementSystem.Areas.Identity.Pages.Account
 {
@@ -97,6 +99,20 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required]
+            public string FirstName { get; set; }
+
+            [Required]
+            public string LastName { get; set; }
+
+            [Required]
+            public string HeightFeet { get; set; }
+
+            [Required]
+            public string HeightInches { get; set; }
+
+            [Required]
+            public string Weight { get; set; }
         }
 
 
@@ -109,13 +125,35 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var normalizedFirstName = Input.FirstName?.ToLower();
+                var normalizedLastName = Input.LastName?.ToLower();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                var exists = await _userManager.Users
+                    .OfType<ApplicationUser>()
+                    .AnyAsync(u =>
+                        u.FirstName.ToLower() == normalizedFirstName &&
+                        u.LastName.ToLower() == normalizedLastName);
+                if (exists)
+                {
+                    ModelState.AddModelError(string.Empty, "A user with the same first and last name already exists.");
+                    return Page();
+                }
+
+                var user = new ApplicationUser
+                {
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    HeightFeet = Input.HeightFeet,
+                    HeightInches = Input.HeightInches,
+                    Weight = Input.Weight,
+                    Email = Input.Email,
+                    UserName = Input.Email
+                };
+
+                //await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                //await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
