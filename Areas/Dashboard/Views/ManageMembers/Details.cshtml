@@ -1,0 +1,23 @@
+﻿@model FitnessManagementSystem.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Member Details";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Member Details</h2>
+
+    <div class="card shadow-lg p-4 w-50 mx-auto">
+        <h4>@Model.FirstName @Model.LastName</h4>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Height:</strong> @Model.HeightFeet' @Model.HeightInches"</p>
+        <p><strong>Weight:</strong> @Model.Weight lbs</p>
+
+        <div class="text-center mt-3">
+            <a href="@Url.Action("Edit", "ManageMembers", new { id = Model.Id })" class="btn btn-warning">✏️ Edit</a>
+            <form asp-action="Delete" method="post" asp-route-id="@Model.Id" class="d-inline">
+                <button type="submit" class="btn btn-danger">🗑️ Delete</button>
+            </form>
+            <a href="@Url.Action("Index", "ManageMembers")" class="btn btn-secondary">🔙 Back</a>
+        </div>
+    </div>
+</div>

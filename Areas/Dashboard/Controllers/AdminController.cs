@@ -14,13 +14,6 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
             return View();
         }
 
-        public IActionResult ManageMembers()
-        {
-            ViewData["Title"] = "Manage Members";
-            ViewData["Description"] = "Add, edit, and delete member records";
-            return View();
-        }
-
         public IActionResult ManageTrainers()
         {
             ViewData["Title"] = "Manage Trainers";
