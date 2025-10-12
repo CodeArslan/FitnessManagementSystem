@@ -1,0 +1,81 @@
+﻿@model FitnessManagementSystem.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Add Member";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <h3 class="text-center mb-4">Add Member</h3>
+
+        <form asp-area="Dashboard" asp-controller="Members" asp-action="AddMember" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+
+                <!-- First Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <!-- Last Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter email address" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="Password" class="form-label">Password</label>
+                    <input id="Password" name="Password" class="form-control" placeholder="Enter password" type="password" />
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+                    <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Re-enter password" type="password" />
+                </div>
+
+                <!-- Height Feet -->
+                <div class="col-md-3 mb-3">
+                    <label asp-for="HeightFeet" class="form-label">Height (Feet)</label>
+                    <input asp-for="HeightFeet" class="form-control" placeholder="e.g. 5" />
+                    <span asp-validation-for="HeightFeet" class="text-danger"></span>
+                </div>
+
+                <!-- Height Inches -->
+                <div class="col-md-3 mb-3">
+                    <label asp-for="HeightInches" class="form-label">Height (Inches)</label>
+                    <input asp-for="HeightInches" class="form-control" placeholder="e.g. 8" />
+                    <span asp-validation-for="HeightInches" class="text-danger"></span>
+                </div>
+
+                <!-- Weight -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Weight" class="form-label">Weight</label>
+                    <input asp-for="Weight" class="form-control" placeholder="e.g. 70 kg" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-primary px-4">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

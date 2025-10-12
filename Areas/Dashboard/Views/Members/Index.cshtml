@@ -1,0 +1,75 @@
+﻿@model IEnumerable<FitnessManagementSystem.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Member Details";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">👥 Member Details</h3>
+            <a asp-area="Dashboard" asp-controller="Members" asp-action="AddMember" class="btn btn-primary">
+                ➕ Add New Member
+            </a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <table class="table table-striped table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Height (ft)</th>
+                    <th>Height (in)</th>
+                    <th>Weight (kg)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int count = 1;
+                    foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@count</td>
+                            <td>@user.Email</td>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.HeightFeet</td>
+                            <td>@user.HeightInches</td>
+                            <td>@user.Weight</td>
+                            <td>
+                                <a asp-area="Dashboard" asp-controller="Members" asp-action="EditMember" asp-route-id="@user.Id"
+                                   class="btn btn-sm btn-warning me-1">
+                                    ✏️ Edit
+                                </a>
+                                <a asp-area="Dashboard" asp-controller="Members" asp-action="DeleteMember" asp-route-id="@user.Id"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete this member?');">
+                                    🗑️ Delete
+                                </a>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-muted text-center">No members found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
