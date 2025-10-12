@@ -25,17 +25,17 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -127,20 +127,6 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var normalizedFirstName = Input.FirstName?.ToLower();
-                var normalizedLastName = Input.LastName?.ToLower();
-
-                var exists = await _userManager.Users
-                    .OfType<ApplicationUser>()
-                    .AnyAsync(u =>
-                        u.FirstName.ToLower() == normalizedFirstName &&
-                        u.LastName.ToLower() == normalizedLastName);
-                if (exists)
-                {
-                    ModelState.AddModelError(string.Empty, "A user with the same first and last name already exists.");
-                    return Page();
-                }
-
                 var user = new ApplicationUser
                 {
                     FirstName = Input.FirstName,
@@ -149,7 +135,8 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
                     HeightInches = Input.HeightInches,
                     Weight = Input.Weight,
                     Email = Input.Email,
-                    UserName = Input.Email
+                    UserName = Input.Email,
+                    Role = "Member"
                 };
 
                 //await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -192,11 +179,11 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
@@ -206,13 +193,13 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }
