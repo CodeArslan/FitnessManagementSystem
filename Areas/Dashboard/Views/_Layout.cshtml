@@ -1,0 +1,163 @@
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    Layout = null;
+
+    var userName = User.Identity.Name ?? "Guest";
+    var userRole = "";
+
+    if (User.Identity.IsAuthenticated)
+    {
+        userRole = ((System.Security.Claims.ClaimsIdentity)User.Identity)
+                        .FindFirst("Role")?.Value ?? "";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Gym Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+@*     <link href="~/Content/fontawesome.min.css" rel="stylesheet" /> *@
+ @*    <link href="~/Content/site.css" rel="stylesheet" /> *@
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* Sidebar */
+        #wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        #sidebar-wrapper {
+            width: 250px;
+            height: 100vh;
+            background: #212529;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+            #sidebar-wrapper .sidebar-heading {
+                padding: 1.2rem;
+                font-size: 1.25rem;
+                font-weight: bold;
+                background-color: #343a40;
+                text-align: center;
+            }
+
+            #sidebar-wrapper .list-group-item {
+                background-color: #212529;
+                color: #fff;
+                border: none;
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+
+                #sidebar-wrapper .list-group-item:hover {
+                    background-color: #0d6efd;
+                    color: white;
+                }
+
+        /* Toggled sidebar */
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: -250px;
+        }
+
+        /* Page content */
+        #page-content-wrapper {
+            flex-grow: 1;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+            .navbar .btn {
+                font-size: 1rem;
+            }
+
+            .navbar .user-info {
+                font-weight: 500;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-end" id="sidebar-wrapper">
+            <div class="sidebar-heading text-white border-bottom">
+                🏋 Gym System
+            </div>
+
+            <div class="list-group list-group-flush">
+                @if (userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    <a href="@Url.Action("Index", "Admin")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
+                    <a href="@Url.Action("ManageMembers", "Admin")" class="list-group-item list-group-item-action">👥 Manage Members</a>
+                    <a href="@Url.Action("ManageTrainers", "Admin")" class="list-group-item list-group-item-action">💪 Manage Trainers</a>
+                    <a href="@Url.Action("TrainerScheduling", "Admin")" class="list-group-item list-group-item-action">🗓 Trainer Scheduling</a>
+                    <a href="@Url.Action("MonitorFeedback", "Admin")" class="list-group-item list-group-item-action">⭐ Monitor Feedback</a>
+                }
+                else if (userRole.Equals("Trainer", StringComparison.OrdinalIgnoreCase))
+                {
+                    <a href="@Url.Action("Index", "Trainer")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
+                    <a href="@Url.Action("WorkoutPlans", "Trainer")" class="list-group-item list-group-item-action">🏋 Workout Plans</a>
+                    <a href="@Url.Action("DietPlans", "Trainer")" class="list-group-item list-group-item-action">🥗 Diet Plans</a>
+                    <a href="@Url.Action("Attendance", "Trainer")" class="list-group-item list-group-item-action">📋 Attendance</a>
+                    <a href="@Url.Action("ClassScheduling", "Trainer")" class="list-group-item list-group-item-action">🗓 Class Scheduling</a>
+                    <a href="@Url.Action("MemberProgress", "Trainer")" class="list-group-item list-group-item-action">📈 Member Progress</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "Home")" class="list-group-item list-group-item-action">🏠 Home</a>
+                }
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+                <div class="container-fluid">
+                    <button class="btn btn-outline-primary" id="menu-toggle">☰</button>
+
+                    <div class="ms-auto d-flex align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <span class="me-3 user-info">
+                                👤 @userName (@userRole)
+                            </span>
+                            <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger btn-sm">Logout</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-success btn-sm">Login</a>
+                        }
+                    </div>
+                </div>
+            </nav>
+
+            <main class="container-fluid py-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

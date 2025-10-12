@@ -3,6 +3,7 @@
 #nullable disable
 
 using FitnessManagementSystem.Data;
+using FitnessManagementSystem.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,12 +22,12 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private ApplicationDbContext _dbContext;
         private readonly ILogger<LoginModel> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,ApplicationDbContext dbContext, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger,ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -121,31 +122,43 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    // ✅ Fetch the user from the database using DbContext
+                    // ✅ Fetch the user
                     var user = await _dbContext.Users
                         .Where(u => u.Email == Input.Email)
                         .FirstOrDefaultAsync();
 
                     if (user != null)
                     {
-                        // ✅ Create a new ClaimsPrincipal for this user
+                        // ✅ Get role directly from database column
+                        var roleFromDb = user.Role ?? "Member";
+
+                        // ✅ Create claims and re-sign user (optional if you already handle claims)
                         var userPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
                         var identity = (System.Security.Claims.ClaimsIdentity)userPrincipal.Identity;
 
-                        // ✅ Get role directly from the DB column
-                        var roleFromDb = user.Role ?? "Member";
-
-                        // ✅ Add Role claim if missing
                         if (!identity.HasClaim(c => c.Type == "Role"))
                         {
                             identity.AddClaim(new System.Security.Claims.Claim("Role", roleFromDb));
                         }
 
-                        // ✅ Re-sign the user with updated claims
                         await _signInManager.SignOutAsync();
                         await _signInManager.SignInWithClaimsAsync(user, isPersistent: Input.RememberMe, identity.Claims);
+
+                        // ✅ Redirect based on Role
+                        switch (roleFromDb)
+                        {
+                            case "Admin":
+                                return RedirectToAction("Index", "Admin", new { area = "Dashboard" });
+
+                            case "Trainer":
+                                return RedirectToAction("Index", "Trainer", new { area = "Dashboard" });
+
+                            default: // Member or any other role
+                                return LocalRedirect(returnUrl);
+                        }
                     }
 
+                    // Default fallback
                     return LocalRedirect(returnUrl);
                 }
 
