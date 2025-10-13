@@ -17,31 +17,49 @@
                 <div class="col-md-6 mb-3">
                     <label asp-for="FirstName" class="form-label">First Name</label>
                     <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label asp-for="LastName" class="form-label">Last Name</label>
                     <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label asp-for="Email" class="form-label">Email</label>
                     <input asp-for="Email" class="form-control" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="JoinDate" class="form-label">Join Date</label>
+                    <input asp-for="JoinDate" class="form-control" type="date" />
+                    <span asp-validation-for="JoinDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label asp-for="FitnessGoal" class="form-label">Fitness Goal</label>
+                    <textarea asp-for="FitnessGoal" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="FitnessGoal" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label asp-for="HeightFeet" class="form-label">Height (Feet)</label>
                     <input asp-for="HeightFeet" class="form-control" />
+                    <span asp-validation-for="HeightFeet" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label asp-for="HeightInches" class="form-label">Height (Inches)</label>
                     <input asp-for="HeightInches" class="form-control" />
+                    <span asp-validation-for="HeightInches" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label asp-for="Weight" class="form-label">Weight</label>
                     <input asp-for="Weight" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
                 </div>
 
                 <!-- Optional Password Change -->

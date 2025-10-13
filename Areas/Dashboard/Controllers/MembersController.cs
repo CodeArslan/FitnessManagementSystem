@@ -46,6 +46,8 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
                     HeightFeet = model.HeightFeet,
                     HeightInches = model.HeightInches,
                     Weight = model.Weight,
+                    JoinDate = model.JoinDate,          // Added field
+                    FitnessGoal = model.FitnessGoal,    // Added field
                     Role = "Member" // Hardcoded role
                 };
 
@@ -101,6 +103,8 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
             user.HeightFeet = model.HeightFeet;
             user.HeightInches = model.HeightInches;
             user.Weight = model.Weight;
+            user.JoinDate = model.JoinDate;          
+            user.FitnessGoal = model.FitnessGoal;    
 
             // Update user details
             var updateResult = await _userManager.UpdateAsync(user);

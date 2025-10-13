@@ -31,6 +31,8 @@
                     <th>Height (ft)</th>
                     <th>Height (in)</th>
                     <th>Weight (kg)</th>
+                    <th>Join Date</th>
+                    <th>Fitness Goal</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -48,6 +50,8 @@
                             <td>@user.HeightFeet</td>
                             <td>@user.HeightInches</td>
                             <td>@user.Weight</td>
+                            <td>@user.JoinDate?.ToString("MM/dd/yyyy")</td>
+                            <td>@user.FitnessGoal</td>
                             <td>
                                 <a asp-area="Dashboard" asp-controller="Members" asp-action="EditMember" asp-route-id="@user.Id"
                                    class="btn btn-sm btn-warning me-1">
@@ -66,7 +70,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="8" class="text-muted text-center">No members found.</td>
+                        <td colspan="10" class="text-muted text-center">No members found.</td>
                     </tr>
                 }
             </tbody>
