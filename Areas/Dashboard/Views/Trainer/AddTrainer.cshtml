@@ -1,0 +1,81 @@
+﻿@model FitnessManagementSystem.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Add Trainer";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <h3 class="text-center mb-4">💪 Add Trainer</h3>
+
+        <form asp-area="Dashboard" asp-controller="Trainer" asp-action="AddTrainer" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+
+                <!-- First Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <!-- Last Name -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter email address" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <!-- Specialization -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Specialization" class="form-label">Specialization</label>
+                    <input asp-for="Specialization" class="form-control" placeholder="e.g., Yoga, Weight Training" />
+                    <span asp-validation-for="Specialization" class="text-danger"></span>
+                </div>
+
+                <!-- Certification -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Certification" class="form-label">Certification</label>
+                    <input asp-for="Certification" class="form-control" placeholder="e.g., ACE, NASM" />
+                    <span asp-validation-for="Certification" class="text-danger"></span>
+                </div>
+
+                <!-- Hire Date -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="HireDate" class="form-label">Hire Date</label>
+                    <input asp-for="HireDate" class="form-control" type="date" />
+                    <span asp-validation-for="HireDate" class="text-danger"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="Password" class="form-label">Password</label>
+                    <input id="Password" name="Password" class="form-control" placeholder="Enter password" type="password" />
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+                    <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Re-enter password" type="password" />
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-primary px-4">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
