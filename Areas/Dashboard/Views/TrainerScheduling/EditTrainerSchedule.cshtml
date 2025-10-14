@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Edit Schedule";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+
+    var date = ViewBag.Date;
+    var shiftId = ViewBag.ShiftId;
+    var selectedTrainerIds = ViewBag.SelectedTrainerIds as List<string> ?? new List<string>();
+    var trainerShifts = ViewBag.TrainerShifts as List<TrainerShift> ?? new List<TrainerShift>();
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <h3 class="text-center mb-4">✏️ Edit Schedule</h3>
+
+        <form asp-area="Dashboard" asp-controller="TrainerScheduling" asp-action="EditTrainerSchedule" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <input type="hidden" name="Date" value="@date.ToString("yyyy-MM-dd")" />
+            <input type="hidden" name="ShiftId" value="@shiftId" />
+
+            <div class="row">
+                <!-- Date (Display only) -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Date</label>
+                    <input class="form-control" value="@date.ToString("MM/dd/yyyy")" readonly />
+                </div>
+
+                <!-- Shift (Display only) -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Shift</label>
+                    <input class="form-control" value="@trainerShifts.FirstOrDefault()?.Shift?.Name" readonly />
+                </div>
+
+                <!-- Trainers with Add Button -->
+                <div class="col-12 mb-3">
+                    <label for="TrainerIds" class="form-label">Trainers</label>
+                    <div class="input-group">
+                        <select name="TrainerIds" id="TrainerIds" class="form-select" multiple required>
+                            @if (ViewBag.Trainers != null)
+                            {
+                                foreach (var trainer in ViewBag.Trainers)
+                                {
+                                    <option value="@trainer.Value"
+                                            selected="@(selectedTrainerIds.Contains(trainer.Value) ? "selected" : null)">
+                                        @trainer.Text
+                                    </option>
+                                }
+                            }
+                        </select>
+                        <a href="@Url.Action("AddTrainer", "Trainer", new { area = "Dashboard" })" class="btn btn-outline-primary">
+                            ➕
+                        </a>
+                    </div>
+                    <small class="form-text text-muted">Hold Ctrl (or Cmd on Mac) to select multiple trainers</small>
+                    <span class="text-danger field-validation-valid" data-valmsg-for="TrainerIds" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-success px-4">Update Schedule</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Shift Modal -->
+<div class="modal fade" id="addShiftModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Shift</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- This will be loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            // Load modal content when modal is shown
+            $('#addShiftModal').on('show.bs.modal', function () {
+                $(this).find('.modal-body').load('@Url.Action("AddShift", "TrainerScheduling")');
+            });
+
+            // Handle form submission via AJAX
+            $(document).on('submit', 'form', function(e) {
+                if ($(this).attr('id') === 'addShiftForm') {
+                    e.preventDefault();
+                    $.post('@Url.Action("AddShift", "TrainerScheduling")', $(this).serialize(), function(response) {
+                        if (response.success) {
+                            $('#addShiftModal').modal('hide');
+                            alert(response.message);
+                        } else {
+                            alert(response.message);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

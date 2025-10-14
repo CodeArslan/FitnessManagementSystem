@@ -12,6 +12,8 @@ namespace FitnessManagementSystem.Models
         public string? Specialization { get; set; }
         public string? Certification { get; set; }
         public DateTime? HireDate { get; set; }
+        public DateTime? JoinDate { get; set; }
+        public string? FitnessGoal { get; set; }
         public string? Role { get; set; } = String.Empty;
     }
 }

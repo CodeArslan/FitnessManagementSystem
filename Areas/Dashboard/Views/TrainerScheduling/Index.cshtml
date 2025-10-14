@@ -1,0 +1,107 @@
+﻿@model IEnumerable<FitnessManagementSystem.Models.TrainerShift>
+
+@{
+    ViewData["Title"] = "Trainer Scheduling";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">📅 Trainer Scheduling</h3>
+            <a asp-area="Dashboard" asp-controller="TrainerScheduling" asp-action="AddTrainerSchedule" class="btn btn-primary">
+                ➕ Assign Schedule
+            </a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <table class="table table-striped table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Shift</th>
+                    <th>Time</th>
+                    <th>Trainers</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    // Group by Date and Shift to show multiple trainers together
+                    var groupedSchedules = Model
+                    .GroupBy(ts => new { ts.Date, ts.ShiftId, ts.Shift })
+                    .Select(g => new
+                    {
+                        Date = g.Key.Date,
+                        ShiftId = g.Key.ShiftId,
+                        Shift = g.Key.Shift,
+                        Trainers = g.Select(ts => ts.Trainer).ToList()
+                    })
+                    .ToList();
+
+                    int count = 1;
+                    foreach (var schedule in groupedSchedules)
+                    {
+                        <tr>
+                            <td>@count</td>
+                            <td>@schedule.Date.ToString("MM/dd/yyyy")</td>
+                            <td>@schedule.Shift?.Name</td>
+                            <td>
+                                @if (schedule.Shift != null)
+                                {
+                                    var startTime = DateTime.Today.Add(schedule.Shift.StartTime).ToString("hh:mm tt");
+                                    var endTime = DateTime.Today.Add(schedule.Shift.EndTime).ToString("hh:mm tt");
+                                    @($"{startTime} - {endTime}")
+                                }
+                            </td>
+                            <td>
+                                @foreach (var trainer in schedule.Trainers)
+                                {
+                                    <span class="badge bg-primary me-1 mb-1">@trainer?.FirstName @trainer?.LastName</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-area="Dashboard" asp-controller="TrainerScheduling" asp-action="EditTrainerSchedule"
+                                   asp-route-date="@schedule.Date.ToString("yyyy-MM-dd")"
+                                   asp-route-shiftId="@schedule.ShiftId"
+                                   class="btn btn-sm btn-warning me-1">
+                                    ✏️ Edit
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger"
+                                        onclick="deleteSchedule('@schedule.Date.ToString("yyyy-MM-dd")', @schedule.ShiftId)">
+                                    🗑️ Delete All
+                                </button>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-muted text-center">No schedules found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteSchedule(date, shiftId) {
+            if (confirm('Are you sure you want to delete all trainer assignments for this shift?')) {
+                window.location.href = '@Url.Action("DeleteSchedule", "TrainerScheduling")' +
+                    '?date=' + date + '&shiftId=' + shiftId;
+            }
+        }
+    </script>
+}
