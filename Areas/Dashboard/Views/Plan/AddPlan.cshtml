@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model FitnessManagementSystem.Models.Plan
+
+@{
+    ViewData["Title"] = "Add Plan";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <h3 class="text-center mb-4">📋 Add New Plan</h3>
+
+        <form asp-area="Dashboard" asp-controller="Plan" asp-action="AddPlan" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <!-- Member Selection -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MemberId" class="form-label">Select Member</label>
+                    <select asp-for="MemberId" asp-items="ViewBag.Members" class="form-select" required>
+                        <option value="">Select Member</option>
+                    </select>
+                    <span asp-validation-for="MemberId" class="text-danger"></span>
+                </div>
+
+                <!-- Plan Type -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PlanType" class="form-label">Plan Type</label>
+                    <select asp-for="PlanType" asp-items="ViewBag.PlanTypes" class="form-select" required>
+                        <option value="">Select Plan Type</option>
+                    </select>
+                    <span asp-validation-for="PlanType" class="text-danger"></span>
+                </div>
+
+                <!-- Start Date -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StartDate" class="form-label">Start Date</label>
+                    <input asp-for="StartDate" class="form-control" type="date" required />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+
+                <!-- End Date -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EndDate" class="form-label">End Date</label>
+                    <input asp-for="EndDate" class="form-control" type="date" required />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+
+                <!-- Plan Details -->
+                <div class="col-12 mb-3">
+                    <label asp-for="PlanDetails" class="form-label">Plan Details</label>
+                    <textarea asp-for="PlanDetails" class="form-control" rows="6" placeholder="Enter detailed plan description..." required></textarea>
+                    <span asp-validation-for="PlanDetails" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-primary px-4">Create Plan</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            // Set minimum dates to today
+            var today = new Date().toISOString().split('T')[0];
+            $('#StartDate').attr('min', today);
+            $('#EndDate').attr('min', today);
+
+            // Validate end date is after start date
+            $('#StartDate').on('change', function() {
+                var startDate = $(this).val();
+                $('#EndDate').attr('min', startDate);
+            });
+        });
+    </script>
+}
