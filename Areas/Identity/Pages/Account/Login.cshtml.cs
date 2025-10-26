@@ -116,69 +116,72 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-
-                if (result.Succeeded)
+                var user_email = await _userManager.FindByEmailAsync(Input.Email);
+                if (user_email != null)
                 {
-                    _logger.LogInformation("User logged in.");
+                    // Check password without email confirmation requirement
+                    var result = await _signInManager.CheckPasswordSignInAsync(user_email, Input.Password, lockoutOnFailure: false);
 
-                    // ✅ Fetch the user
-                    var user = await _dbContext.Users
-                        .Where(u => u.Email == Input.Email)
-                        .FirstOrDefaultAsync();
-
-                    if (user != null)
+                    if (result.Succeeded)
                     {
-                        // ✅ Get role directly from database column
-                        var roleFromDb = user.Role ?? "Member";
+                        _logger.LogInformation("User logged in.");
 
-                        // ✅ Create claims and re-sign user (optional if you already handle claims)
-                        var userPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
-                        var identity = (System.Security.Claims.ClaimsIdentity)userPrincipal.Identity;
+                        // ✅ Fetch the user
+                        var user = await _dbContext.Users
+                            .Where(u => u.Email == Input.Email)
+                            .FirstOrDefaultAsync();
 
-                        if (!identity.HasClaim(c => c.Type == "Role"))
+                        if (user != null)
                         {
-                            identity.AddClaim(new System.Security.Claims.Claim("Role", roleFromDb));
-                        }
+                            // ✅ Get role directly from database column
+                            var roleFromDb = user.Role ?? "Member";
 
-                        await _signInManager.SignOutAsync();
-                        await _signInManager.SignInWithClaimsAsync(user, isPersistent: Input.RememberMe, identity.Claims);
+                            // ✅ Create claims and re-sign user (optional if you already handle claims)
+                            var userPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
+                            var identity = (System.Security.Claims.ClaimsIdentity)userPrincipal.Identity;
 
-                        // ✅ Redirect based on Role
-                        switch (roleFromDb)
-                        {
-                            case "Admin":
-                                return RedirectToAction("Index", "Admin", new { area = "Dashboard" });
+                            if (!identity.HasClaim(c => c.Type == "Role"))
+                            {
+                                identity.AddClaim(new System.Security.Claims.Claim("Role", roleFromDb));
+                            }
 
-                            case "Trainer":
-                                return RedirectToAction("Index", "Trainer", new { area = "Dashboard" });
+                            await _signInManager.SignOutAsync();
+                            await _signInManager.SignInWithClaimsAsync(user, isPersistent: Input.RememberMe, identity.Claims);
 
-                            default: // Member or any other role
-                                return LocalRedirect(returnUrl);
+                            // ✅ Redirect based on Role
+                            switch (roleFromDb)
+                            {
+                                case "Admin":
+                                    return RedirectToAction("Index", "Admin", new { area = "Dashboard" });
+
+                                case "Trainer":
+                                    return RedirectToAction("Index", "Trainer", new { area = "Dashboard" });
+
+                                default: // Member or any other role
+                                    return LocalRedirect(returnUrl);
+                            }
                         }
                     }
-
                     // Default fallback
                     return LocalRedirect(returnUrl);
-                }
 
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    }
 
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToPage("./Lockout");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
+                    }
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return Page();
         }
