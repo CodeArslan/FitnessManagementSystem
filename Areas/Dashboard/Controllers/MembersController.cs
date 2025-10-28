@@ -35,6 +35,8 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
                 return View("Index", model);
             }
 
+            // Remove Role from validation since we're hardcoding it
+            ModelState.Remove("Role");
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
