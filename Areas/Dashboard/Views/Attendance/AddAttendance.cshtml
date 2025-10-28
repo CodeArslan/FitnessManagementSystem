@@ -1,0 +1,80 @@
+﻿@model FitnessManagementSystem.Models.Attendance
+
+@{
+    ViewData["Title"] = "Mark Attendance";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <h3 class="text-center mb-4">📊 Mark Attendance</h3>
+
+        <form asp-area="Dashboard" asp-controller="Attendance" asp-action="AddAttendance" method="post" id="attendanceForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Date Selection at Top -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="AttendanceDate" class="form-label">Attendance Date</label>
+                    <input type="date" name="AttendanceDate" id="AttendanceDate" class="form-control" required
+                           value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="AttendanceDate" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+
+            <!-- Members List with Status Dropdowns -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Mark Attendance for Members</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Members != null)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var member in ViewBag.Members)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @member.FirstName @member.LastName
+                                                <input type="hidden" name="MemberIds" value="@member.Id" />
+                                            </td>
+                                            <td>
+                                                <select name="Status_@member.Id" class="form-select">
+                                                    <option value="Present">Present</option>
+                                                    <option value="Absent">Absent</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning text-center">
+                            No members found in the system.
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <button type="submit" class="btn btn-primary px-4">Save Attendance</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

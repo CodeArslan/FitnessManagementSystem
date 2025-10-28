@@ -1,0 +1,200 @@
+﻿using FitnessManagementSystem.Models;
+using FitnessManagementSystem.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+
+namespace FitnessManagementSystem.Areas.Dashboard.Controllers
+{
+    [Area("Dashboard")]
+    public class AttendanceController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser>
+    _userManager;
+
+    public AttendanceController(ApplicationDbContext context, UserManager<ApplicationUser>
+        userManager)
+        {
+        _context = context;
+        _userManager = userManager;
+        }
+
+        // -------------------- INDEX --------------------
+        public async Task<IActionResult>
+            Index(DateTime? attendanceDate)
+            {
+            var attendances = _context.Attendances
+            .Include(a => a.Member)
+            .Include(a => a.Trainer)
+            .AsQueryable();
+
+            // Filter by date
+            if (attendanceDate.HasValue)
+            {
+            attendances = attendances.Where(a => a.AttendanceDate == attendanceDate.Value.Date);
+            }
+
+            var attendanceList = await attendances
+            .OrderByDescending(a => a.AttendanceDate)
+            .ThenBy(a => a.Member.FirstName)
+            .ToListAsync();
+
+            ViewBag.AttendanceDate = attendanceDate?.ToString("yyyy-MM-dd");
+
+            return View(attendanceList);
+            }
+
+            // -------------------- ADD ATTENDANCE (GET) --------------------
+            [HttpGet]
+            public async Task<IActionResult>
+                AddAttendance()
+                {
+                // Load all members for the list
+                var members = await _context.ApplicationUsers
+                .Where(u => u.Role == "Member")
+                .OrderBy(m => m.FirstName)
+                .ThenBy(m => m.LastName)
+                .ToListAsync();
+
+                ViewBag.Members = members;
+                return View();
+                }
+
+                // -------------------- ADD ATTENDANCE (POST) --------------------
+                [HttpPost]
+                public async Task<IActionResult>
+                    AddAttendance(DateTime AttendanceDate)
+                    {
+                    if (ModelState.IsValid)
+                    {
+                    var currentUser = await _userManager.GetUserAsync(User);
+                    if (currentUser == null)
+                    {
+                    return RedirectToAction("Login", "Account");
+                    }
+
+                    // Get all form values
+                    var form = await HttpContext.Request.ReadFormAsync();
+                    var memberIds = form["MemberIds"].ToList();
+
+                    int recordsAdded = 0;
+
+                    foreach (var memberId in memberIds)
+                    {
+                    // Get status for this specific member
+                    var statusKey = $"Status_{memberId}";
+                    var status = form[statusKey].ToString();
+
+                    // Check if attendance already exists for this member on this date
+                    var existingAttendance = await _context.Attendances
+                    .FirstOrDefaultAsync(a => a.MemberId == memberId && a.AttendanceDate == AttendanceDate.Date);
+
+                    if (existingAttendance == null)
+                    {
+                    var attendance = new Attendance
+                    {
+                    MemberId = memberId,
+                    TrainerId = currentUser.Id,
+                    AttendanceDate = AttendanceDate.Date,
+                    Status = status,
+                    MarkedAt = DateTime.Now
+                    };
+
+                    _context.Attendances.Add(attendance);
+                    recordsAdded++;
+                    }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = $"Attendance marked for {recordsAdded} member(s) successfully!";
+                    return RedirectToAction("Index");
+                    }
+
+                    // Reload members if validation fails
+                    var members = await _context.ApplicationUsers
+                    .Where(u => u.Role == "Member")
+                    .OrderBy(m => m.FirstName)
+                    .ThenBy(m => m.LastName)
+                    .ToListAsync();
+
+                    ViewBag.Members = members;
+                    return View();
+                    }
+
+                    // -------------------- EDIT ATTENDANCE (GET) --------------------
+                    [HttpGet]
+                    public async Task<IActionResult>
+                        EditAttendance(DateTime date)
+                        {
+                        // Get all attendance records for this date
+                        var attendances = await _context.Attendances
+                        .Include(a => a.Member)
+                        .Include(a => a.Trainer)
+                        .Where(a => a.AttendanceDate == date.Date)
+                        .ToListAsync();
+
+                        if (!attendances.Any())
+                        return NotFound();
+
+                        ViewBag.AttendanceDate = date;
+                        ViewBag.Attendances = attendances;
+
+                        return View();
+                        }
+
+                        // -------------------- EDIT ATTENDANCE (POST) --------------------
+                        [HttpPost]
+                        public async Task<IActionResult>
+                            EditAttendance(DateTime AttendanceDate)
+                            {
+                            var form = await HttpContext.Request.ReadFormAsync();
+
+                            foreach (var key in form.Keys)
+                            {
+                            if (key.StartsWith("Status_"))
+                            {
+                            var attendanceId = int.Parse(key.Replace("Status_", ""));
+                            var status = form[key].ToString();
+
+                            var attendance = await _context.Attendances.FindAsync(attendanceId);
+                            if (attendance != null)
+                            {
+                            attendance.Status = status;
+                            attendance.MarkedAt = DateTime.Now;
+                            }
+                            }
+                            }
+
+                            await _context.SaveChangesAsync();
+
+                            TempData["SuccessMessage"] = "Attendance updated successfully!";
+                            return RedirectToAction("Index");
+                            }
+
+                            // -------------------- DELETE ATTENDANCE BY DATE --------------------
+                            [HttpGet]
+                            public async Task<IActionResult>
+                                DeleteAttendanceByDate(DateTime date)
+                                {
+                                var attendances = await _context.Attendances
+                                .Where(a => a.AttendanceDate == date.Date)
+                                .ToListAsync();
+
+                                if (!attendances.Any())
+                                return NotFound();
+
+                                _context.Attendances.RemoveRange(attendances);
+                                await _context.SaveChangesAsync();
+
+                                TempData["SuccessMessage"] = $"All attendance records for {date.ToString("MM/dd/yyyy")} deleted successfully!";
+                                return RedirectToAction("Index");
+                                }
+                                }
+                                }

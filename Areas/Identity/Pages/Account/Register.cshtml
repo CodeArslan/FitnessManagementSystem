@@ -133,7 +133,7 @@
 
                         <!-- Submit Button -->
                         <div class="d-grid">
-                            <button id="registerSubmit" type="submit" class="btn btn-primary btn-lg rounded-3">
+                            <button id="registerSubmit" type="submit" class="btn btn-lg rounded-3 custom-login-btn">
                                 <i class="bi bi-person-plus"></i> Register
                             </button>
                         </div>
@@ -141,11 +141,25 @@
                 </div>
             </div>
             <p class="text-center text-muted mt-3">
-                Already have an account? <a asp-page="./Login">Login here</a>
+                Already have an account? <a asp-page="/Identity/Account/Login">Login here</a>
             </p>
         </div>
     </div>
 </div>
+
+<style>
+    .custom-login-btn {
+        background-color: #f9735b !important;
+        border-color: #f9735b !important;
+        color: white !important;
+    }
+
+        .custom-login-btn:hover {
+            background-color: #e8654d !important;
+            border-color: #e8654d !important;
+            color: white !important;
+        }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
