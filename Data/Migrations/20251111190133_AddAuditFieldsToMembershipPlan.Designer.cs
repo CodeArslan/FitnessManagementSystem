@@ -4,6 +4,7 @@ using FitnessManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251111190133_AddAuditFieldsToMembershipPlan")]
+    partial class AddAuditFieldsToMembershipPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,53 +24,6 @@ namespace FitnessManagementSystem.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("FitnessManagementSystem.MemberMembership", b =>
-                {
-                    b.Property<int>("MembershipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MembershipId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("PlanId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MembershipId");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("PlanId");
-
-                    b.ToTable("MemberMembership");
-                });
 
             modelBuilder.Entity("FitnessManagementSystem.MembershipPlan", b =>
                 {
@@ -113,7 +69,7 @@ namespace FitnessManagementSystem.Data.Migrations
                         new
                         {
                             PlanId = 1,
-                            CreatedAt = new DateTime(2025, 11, 11, 19, 15, 19, 652, DateTimeKind.Utc).AddTicks(8338),
+                            CreatedAt = new DateTime(2025, 11, 11, 19, 1, 31, 351, DateTimeKind.Utc).AddTicks(218),
                             Description = "Full-year plan with trainer and diet support",
                             DurationMonths = 12,
                             IsActive = true,
@@ -123,7 +79,7 @@ namespace FitnessManagementSystem.Data.Migrations
                         new
                         {
                             PlanId = 2,
-                            CreatedAt = new DateTime(2025, 11, 11, 19, 15, 19, 652, DateTimeKind.Utc).AddTicks(8341),
+                            CreatedAt = new DateTime(2025, 11, 11, 19, 1, 31, 351, DateTimeKind.Utc).AddTicks(221),
                             Description = "Half-year plan with trainer support",
                             DurationMonths = 6,
                             IsActive = true,
@@ -133,7 +89,7 @@ namespace FitnessManagementSystem.Data.Migrations
                         new
                         {
                             PlanId = 3,
-                            CreatedAt = new DateTime(2025, 11, 11, 19, 15, 19, 652, DateTimeKind.Utc).AddTicks(8343),
+                            CreatedAt = new DateTime(2025, 11, 11, 19, 1, 31, 351, DateTimeKind.Utc).AddTicks(224),
                             Description = "Quarterly plan for new members",
                             DurationMonths = 3,
                             IsActive = true,
@@ -503,25 +459,6 @@ namespace FitnessManagementSystem.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("FitnessManagementSystem.MemberMembership", b =>
-                {
-                    b.HasOne("FitnessManagementSystem.Models.ApplicationUser", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FitnessManagementSystem.MembershipPlan", "Plan")
-                        .WithMany()
-                        .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("FitnessManagementSystem.Models.Attendance", b =>
