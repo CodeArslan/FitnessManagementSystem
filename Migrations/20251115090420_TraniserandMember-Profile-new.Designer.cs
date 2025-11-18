@@ -4,16 +4,19 @@ using FitnessManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FitnessManagementSystem.Data.Migrations
+namespace FitnessManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251115090420_TraniserandMember-Profile-new")]
+    partial class TraniserandMemberProfilenew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +116,7 @@ namespace FitnessManagementSystem.Data.Migrations
                         new
                         {
                             PlanId = 1,
-                            CreatedAt = new DateTime(2025, 11, 11, 19, 15, 19, 652, DateTimeKind.Utc).AddTicks(8338),
+                            CreatedAt = new DateTime(2025, 11, 15, 9, 4, 19, 638, DateTimeKind.Utc).AddTicks(2045),
                             Description = "Full-year plan with trainer and diet support",
                             DurationMonths = 12,
                             IsActive = true,
@@ -123,7 +126,7 @@ namespace FitnessManagementSystem.Data.Migrations
                         new
                         {
                             PlanId = 2,
-                            CreatedAt = new DateTime(2025, 11, 11, 19, 15, 19, 652, DateTimeKind.Utc).AddTicks(8341),
+                            CreatedAt = new DateTime(2025, 11, 15, 9, 4, 19, 638, DateTimeKind.Utc).AddTicks(2048),
                             Description = "Half-year plan with trainer support",
                             DurationMonths = 6,
                             IsActive = true,
@@ -133,7 +136,7 @@ namespace FitnessManagementSystem.Data.Migrations
                         new
                         {
                             PlanId = 3,
-                            CreatedAt = new DateTime(2025, 11, 11, 19, 15, 19, 652, DateTimeKind.Utc).AddTicks(8343),
+                            CreatedAt = new DateTime(2025, 11, 15, 9, 4, 19, 638, DateTimeKind.Utc).AddTicks(2050),
                             Description = "Quarterly plan for new members",
                             DurationMonths = 3,
                             IsActive = true,
@@ -278,6 +281,22 @@ namespace FitnessManagementSystem.Data.Migrations
                     b.ToTable("Attendances");
                 });
 
+            modelBuilder.Entity("FitnessManagementSystem.Models.MemberProfile", b =>
+                {
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PerformanceCount")
+                        .HasColumnType("int");
+
+                    b.Property<double>("PerformanceScore")
+                        .HasColumnType("float");
+
+                    b.HasKey("MemberId");
+
+                    b.ToTable("MemberProfiles");
+                });
+
             modelBuilder.Entity("FitnessManagementSystem.Models.Plan", b =>
                 {
                     b.Property<int>("Id")
@@ -339,6 +358,28 @@ namespace FitnessManagementSystem.Data.Migrations
                     b.HasKey("ShiftId");
 
                     b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("FitnessManagementSystem.Models.TrainerProfile", b =>
+                {
+                    b.Property<string>("TrainerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("AverageRating")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("LastRatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RatingBadge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RatingCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrainerId");
+
+                    b.ToTable("TrainerProfile");
                 });
 
             modelBuilder.Entity("FitnessManagementSystem.Models.TrainerShift", b =>

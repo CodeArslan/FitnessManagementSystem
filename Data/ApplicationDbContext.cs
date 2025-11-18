@@ -18,6 +18,9 @@ namespace FitnessManagementSystem.Data
         public DbSet<Plan> Plans { get; set; }
         public DbSet<MembershipPlan> MembershipPlans { get; set; }
         public DbSet<MemberMembership> MemberMembership { get; set; }
+        public DbSet<TrainerProfile> TrainerProfile { get; set; }
+        public DbSet<MemberProfile> MemberProfiles { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -88,7 +91,6 @@ namespace FitnessManagementSystem.Data
                 CreatedAt = DateTime.UtcNow
             }
         );
-
 
         }
 
