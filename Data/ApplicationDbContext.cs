@@ -2,6 +2,7 @@
 using FitnessManagementSystem.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace FitnessManagementSystem.Data
 {
@@ -16,8 +17,6 @@ namespace FitnessManagementSystem.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<TrainerShift> TrainerShifts { get; set; }
         public DbSet<Plan> Plans { get; set; }
-        public DbSet<MembershipPlan> MembershipPlans { get; set; }
-        public DbSet<MemberMembership> MemberMembership { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -55,81 +54,6 @@ namespace FitnessManagementSystem.Data
                 .WithMany()
                 .HasForeignKey(p => p.MemberId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<MembershipPlan>().HasData(
-            new MembershipPlan
-            {
-                PlanId = 1,
-                PlanName = "Gold",
-                DurationMonths = 12,
-                Price = 12000M,
-                Description = "Full-year plan with trainer and diet support",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new MembershipPlan
-            {
-                PlanId = 2,
-                PlanName = "Silver",
-                DurationMonths = 6,
-                Price = 7000M,
-                Description = "Half-year plan with trainer support",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new MembershipPlan
-            {
-                PlanId = 3,
-                PlanName = "Bronze",
-                DurationMonths = 3,
-                Price = 4000M,
-                Description = "Quarterly plan for new members",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            }
-        );
-
-
-        }
-
-        // Auto-set CreatedAt and UpdatedAt
-        public override int SaveChanges()
-        {
-            var entries = ChangeTracker.Entries<BaseEntity>();
-
-            foreach (var entry in entries)
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
-                }
-                else if (entry.State == EntityState.Modified)
-                {
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
-                }
-            }
-
-            return base.SaveChanges();
-        }
-
-        // Async version
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var entries = ChangeTracker.Entries<BaseEntity>();
-
-            foreach (var entry in entries)
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
-                }
-                else if (entry.State == EntityState.Modified)
-                {
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
-                }
-            }
-
-            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }
