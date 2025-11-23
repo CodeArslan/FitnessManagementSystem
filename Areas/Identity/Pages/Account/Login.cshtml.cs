@@ -129,7 +129,6 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
 
                     if (user != null)
                     {
-
                         // ✅ Get role directly from database column
                         var roleFromDb = user.Role ?? "Member";
 
