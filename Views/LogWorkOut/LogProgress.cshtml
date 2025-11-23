@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Log Progress";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow mt-5">
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title mb-0">Log Progress</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="LogProgress" method="post">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="weight">Weight (kg)</label>
+                                    <input type="number" step="0.1" class="form-control" id="weight" name="weight" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="bmi">BMI</label>
+                                    <input type="number" step="0.1" class="form-control" id="bmi" name="bmi" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="bodyFat">Body Fat %</label>
+                                    <input type="number" step="0.1" class="form-control" id="bodyFat" name="bodyFat" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-success btn-lg">Save Progress</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

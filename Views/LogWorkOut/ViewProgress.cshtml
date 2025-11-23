@@ -1,0 +1,94 @@
+@model FitnessManagementSystem.ViewModels.MemberProgressViewModel
+
+@{
+    ViewData["Title"] = "My Progress";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <h2>My Progress</h2>
+        <div>
+            <a asp-action="LogWorkout" class="btn btn-primary me-2">Log Workout</a>
+            <a asp-action="LogProgress" class="btn btn-success">Log Stats</a>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="progressTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="workouts-tab" data-toggle="tab" href="#workouts" role="tab" aria-controls="workouts" aria-selected="true">Workout History</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Body Stats</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="progressTabContent">
+        <!-- Workout History Tab -->
+        <div class="tab-pane fade show active" id="workouts" role="tabpanel" aria-labelledby="workouts-tab">
+            @if (!Model.WorkoutSessions.Any())
+            {
+                <div class="alert alert-info">No workouts logged yet. Start tracking your fitness journey!</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Duration (mins)</th>
+                                <th>Calories</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var session in Model.WorkoutSessions)
+                            {
+                                <tr>
+                                    <td>@session.SessionDate.ToString("g")</td>
+                                    <td>@session.DurationMinutes</td>
+                                    <td>@session.CaloriesBurned</td>
+                                    <td>@session.Notes</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <!-- Body Stats Tab -->
+        <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            @if (!Model.ProgressRecords.Any())
+            {
+                <div class="alert alert-info">No progress records found. Log your weight and BMI to track changes!</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Weight (kg)</th>
+                                <th>BMI</th>
+                                <th>Body Fat %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.ProgressRecords)
+                            {
+                                <tr>
+                                    <td>@record.RecordedAt.ToString("d")</td>
+                                    <td>@record.Weight</td>
+                                    <td>@record.BMI</td>
+                                    <td>@record.BodyFatPercentage</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

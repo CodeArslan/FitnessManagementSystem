@@ -20,6 +20,8 @@ namespace FitnessManagementSystem.Data
         public DbSet<MembershipPlans> MembershipPlans { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<WorkoutSession> WorkoutSessions { get; set; }
+        public DbSet<ProgressRecord> ProgressRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
