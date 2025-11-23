@@ -2,14 +2,15 @@
 
 @{
     ViewData["Title"] = "My Progress";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container" style="margin-top:100px !important">
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
         <h2>My Progress</h2>
         <div>
-            <a asp-action="LogWorkout" class="btn btn-primary me-2">Log Workout</a>
-            <a asp-action="LogProgress" class="btn btn-success">Log Stats</a>
+            <a asp-action="LogWorkout" asp-controller="LogWorkout" class="btn btn-primary me-2">Log Workout</a>
+            <a asp-action="LogProgress" asp-controller="LogWorkout" class="btn btn-success">Log Stats</a>
         </div>
     </div>
 
