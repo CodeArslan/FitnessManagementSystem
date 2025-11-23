@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Create Member";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow mt-5">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Add New Member</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateMember" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <h5 class="mt-4">Profile Details</h5>
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="age">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="height">Height (cm)</label>
+                                    <input type="number" step="0.1" class="form-control" id="height" name="height" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="weight">Weight (kg)</label>
+                                    <input type="number" step="0.1" class="form-control" id="weight" name="weight" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Create Member</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

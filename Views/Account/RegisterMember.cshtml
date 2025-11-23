@@ -1,0 +1,90 @@
+﻿@using FMS.ViewModels
+@model RegisterMemberViewModel
+
+<!-- Register Member Modal -->
+<div class="modal fade" id="registerMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow-lg border-0 rounded-4">
+
+            <!-- Header -->
+            <div class="modal-header bg-primary text-white rounded-top-4">
+                <h5 class="modal-title">Member Registration</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Form -->
+            <form asp-controller="Account" asp-action="RegisterMember" method="post">
+                <div class="modal-body p-4">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="Email" class="form-control" placeholder="Email" />
+                                <label asp-for="Email">Email</label>
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+                                <label asp-for="PhoneNumber">Phone Number</label>
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                                <label asp-for="Password">Password</label>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
+                                <label asp-for="ConfirmPassword">Confirm Password</label>
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input asp-for="Age" class="form-control" placeholder="Age" />
+                                <label asp-for="Age">Age</label>
+                            </div>
+                            <span asp-validation-for="Age" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input asp-for="HeightCm" class="form-control" placeholder="Height (cm)" />
+                                <label asp-for="HeightCm">Height (cm)</label>
+                            </div>
+                            <span asp-validation-for="HeightCm" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input asp-for="WeightKg" class="form-control" placeholder="Weight (kg)" />
+                                <label asp-for="WeightKg">Weight (kg)</label>
+                            </div>
+                            <span asp-validation-for="WeightKg" class="text-danger small"></span>
+                        </div>
+
+                        <input type="hidden" asp-for="Role" />
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

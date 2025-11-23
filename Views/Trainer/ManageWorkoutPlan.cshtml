@@ -1,0 +1,36 @@
+@model IEnumerable<FMS.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Manage Workout Plans";
+}
+
+<div class="container">
+    <h2 class="my-4">Create Workout Plan</h2>
+    <form asp-action="CreateWorkoutPlan" method="post">
+        <div class="mb-3">
+            <label class="form-label">Select Member</label>
+            <select name="memberId" class="form-select" required>
+                <option value="">-- Select Member --</option>
+                @foreach (var member in Model)
+                {
+                    <option value="@member.Id">@member.UserName</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Plan Details</label>
+            <textarea name="details" class="form-control" rows="5" required placeholder="Enter workout details..."></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Start Date</label>
+                <input type="date" name="startDate" class="form-control" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">End Date</label>
+                <input type="date" name="endDate" class="form-control" required />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Plan</button>
+    </form>
+</div>

@@ -1,0 +1,97 @@
+@model FMS.ViewModels.MemberDashboardViewModel
+
+@{
+    ViewData["Title"] = "Member Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <h1>Welcome, @Model.Profile.User?.UserName!</h1> <!-- Assuming User is included or we use ViewBag -->
+        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+    <p class="lead">This is your personalized dashboard.</p>
+
+    <div class="row mt-4">
+        <!-- Profile Summary Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3 shadow">
+                <div class="card-header">My Profile</div>
+                <div class="card-body">
+                    <h5 class="card-title">Physical Stats</h5>
+                    <p class="card-text">
+                        <strong>Age:</strong> @Model.Profile.Age<br />
+                        <strong>Height:</strong> @Model.Profile.HeightCm cm<br />
+                        <strong>Weight:</strong> @Model.Profile.WeightKg kg<br />
+                        <strong>BMI:</strong> @Model.Profile.BMI.ToString("0.00")
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Membership Status Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3 shadow">
+                <div class="card-header">Membership Status</div>
+                <div class="card-body">
+                    <h5 class="card-title">Active Plan</h5>
+                    @if (Model.ActiveMembership != null)
+                    {
+                        <p class="card-text">
+                            <strong>@Model.ActiveMembership.Plan.PlanName</strong><br />
+                            Expires: @Model.ActiveMembership.EndDate.ToShortDateString()<br />
+                            <span class="badge bg-light text-dark">Active</span>
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="card-text">
+                            No active plan found. <br />
+                            <a asp-action="PurchasePlan" class="text-white text-decoration-underline">Purchase a Plan</a>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Appointments Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3 shadow">
+                <div class="card-header">Upcoming Sessions</div>
+                <div class="card-body">
+                    <h5 class="card-title">Next Session</h5>
+                    @if (Model.UpcomingAppointments.Any())
+                    {
+                        var next = Model.UpcomingAppointments.First();
+                        <p class="card-text">
+                            <strong>@next.SessionType</strong> with @next.Trainer.UserName<br />
+                            @next.SessionDate.ToString("g")<br />
+                            <a asp-action="BookSession" class="text-white text-decoration-underline">Book Another</a>
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="card-text">
+                            No upcoming sessions. <br />
+                            <a asp-action="BookSession" class="text-white text-decoration-underline">Book a Trainer</a>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Quick Actions</h3>
+            <div class="d-grid gap-2 d-md-block">
+                <a asp-action="BookSession" class="btn btn-outline-primary btn-lg">Book a Trainer</a>
+                <a asp-action="ViewProgress" class="btn btn-outline-primary btn-lg">View Progress</a>
+                <a asp-action="GiveFeedback" class="btn btn-outline-primary btn-lg">Give Feedback</a>
+                <a asp-action="PurchasePlan" class="btn btn-outline-success btn-lg">Purchase Membership</a>
+            </div>
+        </div>
+    </div>
+</div>

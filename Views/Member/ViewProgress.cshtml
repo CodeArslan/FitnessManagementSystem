@@ -1,0 +1,50 @@
+@model IEnumerable<FMS.Models.ProgressRecord>
+
+@{
+    ViewData["Title"] = "My Progress";
+}
+
+<div class="container">
+    <h2 class="my-4 text-center">My Progress</h2>
+    
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            No progress records found. Start logging your workouts!
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Weight (kg)</th>
+                        <th>BMI</th>
+                        <th>Body Fat %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in Model)
+                    {
+                        <tr>
+                            <td>@record.RecordedAt.ToShortDateString()</td>
+                            <td>@record.Weight</td>
+                            <td>@record.BMI.ToString("0.00")</td>
+                            <td>@record.BodyFatPercentage</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Placeholder for Chart -->
+        <div class="mt-5">
+            <h4 class="text-center">Progress Chart</h4>
+            <div class="text-center text-muted">
+                (Chart visualization would go here using Chart.js or similar)
+            </div>
+        </div>
+    }
+</div>

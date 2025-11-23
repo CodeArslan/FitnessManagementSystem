@@ -1,26 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FitnessManagementSystem.Models
+namespace FMS.Models;
+
+public class TrainerShift
 {
-    public class TrainerShift
-    {
-        [Key]
-        public int TrainerShiftId { get; set; }
+    [Key]
+    public int ShiftId { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+    [Required]
+    [ForeignKey("Trainer")]
+    public string TrainerId { get; set; }
+    public ApplicationUser Trainer { get; set; }
 
-        // Foreign key for Trainer
-        public string TrainerId { get; set; }
+    [Required]
+    public DayOfWeek DayOfWeek { get; set; }
 
-        [ForeignKey("TrainerId")]
-        public ApplicationUser? Trainer { get; set; }
+    [Required]
+    public TimeSpan StartTime { get; set; }
 
-        // Foreign key for Shift
-        public int ShiftId { get; set; }
+    [Required]
+    public TimeSpan EndTime { get; set; }
 
-        [ForeignKey("ShiftId")]
-        public Shift? Shift { get; set; }
-    }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

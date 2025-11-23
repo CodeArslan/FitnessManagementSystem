@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using FitnessManagementSystem.Models;
+using FMS.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessManagementSystem.Controllers
+namespace FMS.Controllers
 {
     public class HomeController : Controller
     {
@@ -23,10 +23,6 @@ namespace FitnessManagementSystem.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+
     }
 }

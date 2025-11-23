@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\**" />
     <Compile Remove="wwwroot\training-studio-1.0.0\**" />
+    <Content Remove="Areas\**" />
     <Content Remove="wwwroot\training-studio-1.0.0\**" />
+    <EmbeddedResource Remove="Areas\**" />
     <EmbeddedResource Remove="wwwroot\training-studio-1.0.0\**" />
+    <None Remove="Areas\**" />
     <None Remove="wwwroot\training-studio-1.0.0\**" />
   </ItemGroup>
 
@@ -25,8 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Dashboard\Data\" />
-    <Folder Include="Areas\Dashboard\Models\" />
     <Folder Include="Data\" />
     <Folder Include="Models\" />
     <Folder Include="wwwroot\css\" />

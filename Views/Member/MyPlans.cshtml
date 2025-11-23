@@ -1,0 +1,77 @@
+@model FMS.ViewModels.MemberPlansViewModel
+
+@{
+    ViewData["Title"] = "My Plans";
+}
+
+<div class="container">
+    <h2 class="my-4">My Plans</h2>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="workout-tab" data-toggle="tab" href="#workout" role="tab" aria-controls="workout" aria-selected="true">Workout Plans</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="diet-tab" data-toggle="tab" href="#diet" role="tab" aria-controls="diet" aria-selected="false">Diet Plans</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="myTabContent">
+        <div class="tab-pane fade show active" id="workout" role="tabpanel" aria-labelledby="workout-tab">
+            @if (!Model.WorkoutPlans.Any())
+            {
+                <div class="alert alert-info">No workout plans assigned yet.</div>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var plan in Model.WorkoutPlans)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header bg-dark text-white">
+                                    Assigned by: @plan.Trainer.FullName
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@plan.StartDate.ToShortDateString() - @plan.EndDate.ToShortDateString()</h5>
+                                    <p class="card-text" style="white-space: pre-wrap;">@plan.PlanDetails</p>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Created: @plan.CreatedAt.ToShortDateString()
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="tab-pane fade" id="diet" role="tabpanel" aria-labelledby="diet-tab">
+            @if (!Model.DietPlans.Any())
+            {
+                <div class="alert alert-info">No diet plans assigned yet.</div>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var plan in Model.DietPlans)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header bg-success text-white">
+                                    Assigned by: @plan.Trainer.FullName
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@plan.StartDate.ToShortDateString() - @plan.EndDate.ToShortDateString()</h5>
+                                    <p class="card-text" style="white-space: pre-wrap;">@plan.DietDetails</p>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Created: @plan.CreatedAt.ToShortDateString()
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

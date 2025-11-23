@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using FMS.Models;
+using FMS.Data;
 
 namespace FitnessManagementSystem.Areas.Dashboard.Controllers
 {

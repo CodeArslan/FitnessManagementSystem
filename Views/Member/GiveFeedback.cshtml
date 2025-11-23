@@ -1,0 +1,55 @@
+@model IEnumerable<FMS.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Give Feedback";
+}
+
+<div class="container">
+    <h2 class="my-4 text-center">Rate Your Sessions</h2>
+    
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            You have no completed sessions to rate.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var appointment in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            Session with @appointment.Trainer.UserName on @appointment.SessionDate.ToShortDateString()
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Type:</strong> @appointment.SessionType</p>
+                            <form asp-action="GiveFeedback" method="post">
+                                <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Rating (1-5)</label>
+                                    <select name="rating" class="form-select" required>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Good</option>
+                                        <option value="3">3 - Average</option>
+                                        <option value="2">2 - Poor</option>
+                                        <option value="1">1 - Terrible</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Comment</label>
+                                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -19,8 +19,6 @@
     <link href="~/css/font-awesome.css" type="text/css" rel="stylesheet" />
     <link href="~/css/templatemo-training-studio.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" /> <!-- Move your custom CSS last -->
-
-
     @RenderSection("Styles", required: false)
 </head>
 
@@ -37,7 +35,6 @@
         </div>
     </div>
     <!-- ***** Preloader End ***** -->
-
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky" style="background-color:#1a1a1a; color:#fff;">
         <div class="container">
@@ -45,26 +42,27 @@
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="@Url.Action("Index", "Home")" class="logo">Training<em> Studio</em></a>
+                        <a href="/" class="logo">Training<em> Studio</em></a>
                         <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <li>
-                                <a href="@Url.Action("Index", "Home")"
-                                   class="@(string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("About", "Home")"
-                                   class="@(string.Equals(currentAction, "About", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
-                                    About
-                                </a>
-                            </li>
-                            <li class="main-button"><a href="/Identity/Account/Login" style="display: flex !important; align-items: center !important; justify-content: center !important; color: white !important;">Log In</a></li>
-                            <li class="main-button"><a href="/Identity/Account/Register">Sign Up</a></li>
+                            <li class="scroll-to-section"><a href="/" class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")">Home</a></li>
+                            
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form>
+                                <li class="scroll-to-section"><a asp-controller="Admin" asp-action="Index" class="@(currentController == "Admin" && currentAction == "Index" ? "active" : "")">Dashboard</a></li>
+                                <li class="scroll-to-section"><a asp-controller="Admin" asp-action="ManageMembers" class="@(currentController == "Admin" && currentAction == "ManageMembers" ? "active" : "")">Members</a></li>
+                                <li class="scroll-to-section"><a asp-controller="Admin" asp-action="ManageTrainers" class="@(currentController == "Admin" && currentAction == "ManageTrainers" ? "active" : "")">Trainers</a></li>
+                                        <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
+                                    </form>
+                            }
+                            else
+                            {
+                                <li class="main-button"><a asp-controller="Account" asp-action="Register">Sign Up</a></li>
+                                <li class="main-button"><a asp-controller="Account" asp-action="Login">Login</a></li>
+                            }
                         </ul>
-                       
-
                         <a class='menu-trigger'>
                             <span>Menu</span>
                         </a>
@@ -72,7 +70,6 @@
                     </nav>
                 </div>
             </div>
-        </div>
     </header>
     <!-- ***** Header Area End ***** -->
     <main>
