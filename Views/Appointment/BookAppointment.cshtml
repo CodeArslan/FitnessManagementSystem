@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FitnessManagementSystem.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Book a Session";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2 class="my-4 text-center">Book a Training Session</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form asp-action="BookAppointment" asp-controller="Appointment" method="post">
+                        <div class="mb-3">
+                            <label for="trainerId" class="form-label">Select Trainer</label>
+                            <select name="trainerId" class="form-select" required>
+                                <option value="">-- Select a Trainer --</option>
+                                @foreach (var trainer in Model)
+                                {
+                                    <option value="@trainer.Id">@trainer.FirstName - @trainer.LastName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Session Date & Time</label>
+                            <input type="datetime-local" name="date" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Session Type</label>
+                            <select name="type" class="form-select">
+                                <option value="General Workout">General Workout</option>
+                                <option value="Yoga">Yoga</option>
+                                <option value="Cardio">Cardio</option>
+                                <option value="Strength Training">Strength Training</option>
+                                <option value="Consultation">Consultation</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Book Session</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

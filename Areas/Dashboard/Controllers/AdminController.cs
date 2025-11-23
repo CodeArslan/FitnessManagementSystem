@@ -17,15 +17,15 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index()
-        {
-            var feedback = await _context.Feedbacks
-            .Include(f => f.User)
-            .Include(f => f.Shift)
-            .OrderByDescending(f => f.CreatedAt)
-            .ToListAsync();
+        //public async Task<IActionResult> Index()
+        //{
+        //    var feedback = await _context.Feedbacks
+        //    .Include(f => f.User)
+        //    .Include(f => f.Shift)
+        //    .OrderByDescending(f => f.CreatedAt)
+        //    .ToListAsync();
 
-            return View(feedback);
-        }
+        //    return View(feedback);
+        //}
     }
 }

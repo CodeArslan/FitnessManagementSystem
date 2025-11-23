@@ -50,26 +50,66 @@
                         <ul class="nav">
                             <li>
                                 <a href="@Url.Action("Index", "Home")"
-                                   class="@(string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                                   class="@(currentAction == "Index" ? "active" : "")">
                                     Home
                                 </a>
                             </li>
+
                             <li>
                                 <a href="@Url.Action("About", "Home")"
-                                   class="@(string.Equals(currentAction, "About", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                                   class="@(currentAction == "About" ? "active" : "")">
                                     About
                                 </a>
                             </li>
-                            <li>
-                                <a href="@Url.Action("About", "Home")"
-                                   class="@(string.Equals(currentAction, "About", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
-                                    About
+
+                            <!-- ▼ Separate dropdown menu ▼ -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer;">
+                                    Services <b class="caret"></b>
                                 </a>
+                                <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
+                                    <li><a href="/Programs" style="color:white;">Programs</a></li>
+                                    <li><a href="/Trainers" style="color:white;">Trainers</a></li>
+                                    <li><a href="/Packages" style="color:white;">Packages</a></li>
+                                    <li><a href="/Schedule" style="color:white;">Schedule</a></li>
+                                </ul>
                             </li>
-                            <li class="main-button"><a href="/Identity/Account/Login" style="display: flex !important; align-items: center !important; justify-content: center !important; color: white !important;">Log In</a></li>
-                            <li class="main-button"><a href="/Identity/Account/Register">Sign Up</a></li>
+
+                            <!-- ▼ Authenticated user menu ▼ -->
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        @User.Identity.Name <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
+                                        <li><a href="/Dashboard" style="color:white;">Dashboard</a></li>
+                                        <li><a href="/Profile" style="color:white;">Profile</a></li>
+                                        <li>
+                                            <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                                                <button type="submit" class="dropdown-item"
+                                                        style="background:none; border:none; color:white;">
+                                                    Logout
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="main-button">
+                                    <a href="/Identity/Account/Login"
+                                       style="display:flex; align-items:center; justify-content:center; color:white;">
+                                        Log In
+                                    </a>
+                                </li>
+
+                                <li class="main-button">
+                                    <a href="/Identity/Account/Register">Sign Up</a>
+                                </li>
+                            }
                         </ul>
-                       
 
                         <a class='menu-trigger'>
                             <span>Menu</span>
