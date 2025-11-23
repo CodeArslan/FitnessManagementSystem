@@ -22,6 +22,7 @@ namespace FitnessManagementSystem.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<WorkoutSession> WorkoutSessions { get; set; }
         public DbSet<ProgressRecord> ProgressRecords { get; set; }
+        public DbSet<TrainerAvailability> TrainerAvailabilitys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
