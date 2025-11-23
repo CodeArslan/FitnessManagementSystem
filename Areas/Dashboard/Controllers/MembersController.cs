@@ -37,6 +37,7 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
 
             // Remove Role from validation since we're hardcoding it
             ModelState.Remove("Role");
+            ModelState.Remove("MembershipPlans");
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser

@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace FitnessManagementSystem.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -16,6 +16,8 @@ namespace FitnessManagementSystem.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<TrainerShift> TrainerShifts { get; set; }
         public DbSet<Plan> Plans { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<MembershipPlans> MembershipPlans { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

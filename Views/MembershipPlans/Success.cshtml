@@ -1,0 +1,9 @@
+﻿@model FitnessManagementSystem.Models.MembershipPlans
+
+<div class="container text-center mt-5">
+    <h2 class="text-success">Payment Successful!</h2>
+    <p class="lead">Congratulations! You have successfully purchased the <strong>@Model.PlanName</strong> plan.</p>
+    <p>Duration: @Model.DurationDays Days</p>
+    <p>Price: $@Model.Price</p>
+    <a href="@Url.Action("Index", "MembershipPlans")" class="btn btn-primary mt-3">Back to Plans</a>
+</div>

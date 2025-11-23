@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FitnessManagementSystem.Models.MembershipPlans>
+
+@{
+    ViewData["Title"] = "Plans";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2 class="my-4 text-center">Choose Your Plan</h2>
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    No membership plans are currently available. Please check back later.
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var plan in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-lg border-0">
+                        @{
+                            string headerClass = "bg-secondary";
+                            if (plan.PlanName.Contains("Silver")) headerClass = "bg-secondary";
+                            else if (plan.PlanName.Contains("Gold")) headerClass = "bg-warning";
+                            else if (plan.PlanName.Contains("Diamond")) headerClass = "bg-info";
+                        }
+                        <div class="card-header @headerClass text-white text-center py-4">
+                            <h3 class="fw-bold">@plan.PlanName</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column text-center">
+                            <h1 class="card-title pricing-card-title">$@plan.Price<small class="text-muted fw-light">/mo</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>@plan.DurationDays Days Access</li>
+                                <li>@plan.Description</li>
+                            </ul>
+                            <div class="mt-auto">
+                                <form asp-action="BuyPlan" asp-controller="MembershipPlans" method="post">
+                                    <input type="hidden" name="planId" value="@plan.MembershipPlanId" />
+                                    <button type="submit" class="btn btn-lg btn-block btn-outline-primary w-100">Get Started</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+

@@ -60,6 +60,12 @@
                                     About
                                 </a>
                             </li>
+                            <li>
+                                <a href="@Url.Action("About", "Home")"
+                                   class="@(string.Equals(currentAction, "About", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                                    About
+                                </a>
+                            </li>
                             <li class="main-button"><a href="/Identity/Account/Login" style="display: flex !important; align-items: center !important; justify-content: center !important; color: white !important;">Log In</a></li>
                             <li class="main-button"><a href="/Identity/Account/Register">Sign Up</a></li>
                         </ul>

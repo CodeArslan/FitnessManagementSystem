@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using FitnessManagementSystem.Data
+@using Microsoft.AspNetCore.Identity
+@inject ApplicationDbContext _context
 @{
     Layout = null;
 
@@ -7,8 +9,13 @@
 
     if (User.Identity.IsAuthenticated)
     {
-        userRole = ((System.Security.Claims.ClaimsIdentity)User.Identity)
-                        .FindFirst("Role")?.Value ?? "";
+        var user = _context.Users
+                           .FirstOrDefault(u => u.UserName == userName);
+
+        if (user != null)
+        {
+            userRole = user.Role ?? "";
+        }
     }
 }
 
@@ -105,15 +112,14 @@
                         👥 Manage Members
                     </a>
                     <a href="@Url.Action("Index", "Trainer")" class="list-group-item list-group-item-action">💪 Manage Trainers</a>
-                    <a href="@Url.Action("TrainerScheduling", "Admin")" class="list-group-item list-group-item-action">🗓 Trainer Scheduling</a>
+                    <a href="@Url.Action("Index", "TrainerScheduling")" class="list-group-item list-group-item-action">🗓 Trainer Scheduling</a>
                     <a href="@Url.Action("MonitorFeedback", "Admin")" class="list-group-item list-group-item-action">⭐ Monitor Feedback</a>
                 }
                 else if (userRole.Equals("Trainer", StringComparison.OrdinalIgnoreCase))
                 {
                     <a href="@Url.Action("Index", "Trainer")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
-                    <a href="@Url.Action("WorkoutPlans", "Trainer")" class="list-group-item list-group-item-action">🏋 Workout Plans</a>
-                    <a href="@Url.Action("DietPlans", "Trainer")" class="list-group-item list-group-item-action">🥗 Diet Plans</a>
-                    <a href="@Url.Action("Attendance", "Trainer")" class="list-group-item list-group-item-action">📋 Attendance</a>
+                    <a href="@Url.Action("Index", "Plan")" class="list-group-item list-group-item-action">🏋 Workout Plans</a>
+                    <a href="@Url.Action("Index", "Attendance")" class="list-group-item list-group-item-action">📋 Attendance</a>
                     <a href="@Url.Action("ClassScheduling", "Trainer")" class="list-group-item list-group-item-action">🗓 Class Scheduling</a>
                     <a href="@Url.Action("MemberProgress", "Trainer")" class="list-group-item list-group-item-action">📈 Member Progress</a>
                 }

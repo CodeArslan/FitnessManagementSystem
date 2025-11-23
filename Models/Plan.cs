@@ -17,7 +17,7 @@ namespace FitnessManagementSystem.Models
 
         [Required]
         [StringLength(50)]
-        public string PlanType { get; set; } // "Workout" or "Diet"
+        public string PlanType { get; set; } 
 
         [Required]
         public string PlanDetails { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitnessManagementSystem.Models
 {
@@ -15,5 +16,9 @@ namespace FitnessManagementSystem.Models
         public DateTime? JoinDate { get; set; }
         public string? FitnessGoal { get; set; }
         public string? Role { get; set; } = String.Empty;
+        public int? PlanId { get; set; }
+        [ForeignKey("PlanId")]
+        public MembershipPlans MembershipPlans { get; set; }
+
     }
 }
