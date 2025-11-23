@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -8,17 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Dashboard\Data\**" />
-    <Compile Remove="Areas\Dashboard\Models\**" />
     <Compile Remove="wwwroot\training-studio-1.0.0\**" />
-    <Content Remove="Areas\Dashboard\Data\**" />
-    <Content Remove="Areas\Dashboard\Models\**" />
     <Content Remove="wwwroot\training-studio-1.0.0\**" />
-    <EmbeddedResource Remove="Areas\Dashboard\Data\**" />
-    <EmbeddedResource Remove="Areas\Dashboard\Models\**" />
     <EmbeddedResource Remove="wwwroot\training-studio-1.0.0\**" />
-    <None Remove="Areas\Dashboard\Data\**" />
-    <None Remove="Areas\Dashboard\Models\**" />
     <None Remove="wwwroot\training-studio-1.0.0\**" />
   </ItemGroup>
 
@@ -33,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Dashboard\Data\" />
+    <Folder Include="Areas\Dashboard\Models\" />
     <Folder Include="Data\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Services\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\js\" />
