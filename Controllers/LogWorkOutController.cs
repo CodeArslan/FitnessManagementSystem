@@ -100,17 +100,37 @@ namespace FitnessManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewMemberProgress()
         {
+            // 1️⃣ Get the latest workout session to extract the UserId
+            var lastSession = await _context.WorkoutSessions
+                .OrderByDescending(w => w.SessionDate)
+                .FirstOrDefaultAsync();
+
+            if (lastSession == null)
+            {
+                ViewBag.MemberName = "Member";
+                return View(new MemberProgressViewModel());
+            }
+
+            string memberId = lastSession.UserId;  // 🔥 This is the UserId you want!
+
+            // 2️⃣ Get member details
+            var member = await _userManager.FindByIdAsync(memberId);
+
+            // 3️⃣ Load records only for this user
             var progressRecords = await _context.ProgressRecords
+                .Where(r => r.UserId == memberId)
                 .OrderByDescending(r => r.RecordedAt)
                 .ToListAsync();
 
             var workoutSessions = await _context.WorkoutSessions
+                .Where(w => w.UserId == memberId)
                 .OrderByDescending(w => w.SessionDate)
                 .ToListAsync();
 
-            ViewBag.MemberName = "Member";
+            // 4️⃣ Set the name
+            ViewBag.MemberName = $"{member?.FirstName} {member?.LastName}".Trim();
 
-            var viewModel = new FitnessManagementSystem.ViewModels.MemberProgressViewModel
+            var viewModel = new MemberProgressViewModel
             {
                 ProgressRecords = progressRecords,
                 WorkoutSessions = workoutSessions
