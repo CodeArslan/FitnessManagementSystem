@@ -4,6 +4,7 @@ using FitnessManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.X86;
 
 namespace FitnessManagementSystem.Controllers
 {
@@ -94,6 +95,28 @@ namespace FitnessManagementSystem.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(ViewProgress));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewMemberProgress()
+        {
+            var progressRecords = await _context.ProgressRecords
+                .OrderByDescending(r => r.RecordedAt)
+                .ToListAsync();
+
+            var workoutSessions = await _context.WorkoutSessions
+                .OrderByDescending(w => w.SessionDate)
+                .ToListAsync();
+
+            ViewBag.MemberName = "Member";
+
+            var viewModel = new FitnessManagementSystem.ViewModels.MemberProgressViewModel
+            {
+                ProgressRecords = progressRecords,
+                WorkoutSessions = workoutSessions
+            };
+
+            return View(viewModel);
         }
     }
 }
