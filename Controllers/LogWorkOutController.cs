@@ -40,6 +40,12 @@ namespace FitnessManagementSystem.Controllers
         }
 
         [HttpGet]
+        public IActionResult LogWorkout()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult LogProgress()
         {
             return View();
