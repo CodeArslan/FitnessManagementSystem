@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
+<div class="container" style="margin-top:60px">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-lg p-4 rounded-4">
@@ -43,48 +43,12 @@
 
                         <div class="text-center">
                             <p>
-                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                            </p>
-                            <p>
                                 <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                            </p>
-                            <p>
-                                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
                             </p>
                         </div>
                     </form>
                 </section>
 
-                <!-- External Logins -->
-                <section class="mt-4">
-                    <hr />
-                    <h3 class="text-center">Use another service to log in.</h3>
-
-                    @if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                    {
-                        <div class="text-center">
-                            <p>
-                                There are no external authentication services configured. See this
-                                <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                    article about setting up this ASP.NET application to support logging in via external services
-                                </a>.
-                            </p>
-                        </div>
-                    }
-                    else
-                    {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <div class="text-center">
-                                <p>
-                                    @foreach (var provider in Model.ExternalLogins!)
-                                    {
-                                        <button type="submit" class="btn custom-login-btn" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                    }
-                                </p>
-                            </div>
-                        </form>
-                    }
-                </section>
             </div>
         </div>
     </div>

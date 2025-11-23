@@ -28,7 +28,6 @@ namespace FitnessManagementSystem.Controllers
             return View(trainers);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> BookAppointment(string trainerId, DateTime date, string type)
         {
@@ -44,9 +43,13 @@ namespace FitnessManagementSystem.Controllers
                 Status = "Pending",
                 CreatedAt = DateTime.UtcNow
             };
+
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Your session has been booked successfully!";
             return RedirectToAction("BookAppointment");
         }
+
     }
 }

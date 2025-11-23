@@ -138,7 +138,7 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
                             case "Admin":
                                 return RedirectToAction("Index", "Admin", new { area = "Dashboard" });
                             case "Trainer":
-                                return RedirectToAction("Index", "Trainer", new { area = "Dashboard" });
+                                return RedirectToAction("Dashboard", "Trainer", new { area = "Dashboard" });
                             default: // Member or any other role
                                 return LocalRedirect(returnUrl);
                         }

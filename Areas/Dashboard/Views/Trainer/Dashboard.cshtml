@@ -8,6 +8,24 @@
 <div class="container">
     <h2 class="my-4">Trainer Dashboard</h2>
 
+    <!-- ✅ TempData Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    <!-- END TempData -->
+
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card">
@@ -21,6 +39,7 @@
     </div>
 
     <h3>Upcoming Appointments</h3>
+
     @if (!Model.Any())
     {
         <div class="alert alert-info">No upcoming appointments.</div>
@@ -41,15 +60,16 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.User.UserName <a asp-action="ViewMemberProgress" asp-route-memberId="@item.UserId" class="btn btn-sm btn-info">View Progress</a></td>
+                        <td>@item.User.FirstName @item.User.LastName</td>
                         <td>@item.SessionDate</td>
                         <td>@item.SessionType</td>
                         <td>@item.Status</td>
                         <td>
-                            <form asp-action="MarkAttendance" method="post" class="d-inline">
+                            <form asp-action="MarkCompleted" asp-controller="Trainer" asp-area="Dashboard" method="post" class="d-inline">
                                 <input type="hidden" name="appointmentId" value="@item.AppointmentId" />
-                                <button type="submit" name="status" value="Completed" class="btn btn-sm btn-success">Mark Completed</button>
-                                <button type="submit" name="status" value="NoShow" class="btn btn-sm btn-danger">Mark No-Show</button>
+                                <button type="submit" name="status" value="Completed" class="btn btn-sm btn-success">
+                                    Mark Completed
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -58,4 +78,3 @@
         </table>
     }
 </div>
-

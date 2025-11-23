@@ -1,52 +1,79 @@
-@model IEnumerable<FitnessManagementSystem.Models.Appointment>
+﻿@model IEnumerable<FitnessManagementSystem.Models.Appointment>
 
 @{
     ViewData["Title"] = "Give Feedback";
 }
 
-<div class="container">
-    <h2 class="my-4 text-center">Rate Your Sessions</h2>
-    
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Rate Your Sessions</h2>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-center shadow-sm py-2 mb-4">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center shadow-sm py-2 mb-4">
+            @TempData["Error"]
+        </div>
+    }
+
+
     @if (!Model.Any())
     {
-        <div class="alert alert-info text-center">
+        <div class="alert alert-info text-center shadow-sm py-3">
             You have no completed sessions to rate.
         </div>
     }
     else
     {
-        <div class="row">
+        <div class="row g-4">
             @foreach (var appointment in Model)
             {
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header">
-                            Session with @appointment.Trainer.UserName on @appointment.SessionDate.ToShortDateString()
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow border-0 h-100">
+
+                        <div class="card-header bg-primary text-white fw-semibold">
+                            Session with @appointment.Trainer.FirstName @appointment.Trainer.LastName
+                            <br />
+                            <small class="text-light">
+                                @appointment.SessionDate.ToString("dddd, dd MMM yyyy")
+                            </small>
                         </div>
+
                         <div class="card-body">
-                            <p><strong>Type:</strong> @appointment.SessionType</p>
+                            <p class="mb-2">
+                                <strong>Type:</strong>
+                                <span class="text-muted">@appointment.SessionType</span>
+                            </p>
+
                             <form asp-action="GiveFeedback" method="post">
                                 <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
-                                
+
                                 <div class="mb-3">
-                                    <label class="form-label">Rating (1-5)</label>
-                                    <select name="rating" class="form-select" required>
-                                        <option value="5">5 - Excellent</option>
-                                        <option value="4">4 - Good</option>
-                                        <option value="3">3 - Average</option>
-                                        <option value="2">2 - Poor</option>
-                                        <option value="1">1 - Terrible</option>
+                                    <label class="form-label fw-semibold">Rating (1–5)</label>
+                                    <select name="rating" class="form-select shadow-sm" required>
+                                        <option value="5">⭐ 5 - Excellent</option>
+                                        <option value="4">⭐ 4 - Good</option>
+                                        <option value="3">⭐ 3 - Average</option>
+                                        <option value="2">⭐ 2 - Poor</option>
+                                        <option value="1">⭐ 1 - Terrible</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="mb-3">
-                                    <label class="form-label">Comment</label>
-                                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                                    <label class="form-label fw-semibold">Comment</label>
+                                    <textarea name="comment" class="form-control shadow-sm" rows="3" placeholder="Share your experience..."></textarea>
                                 </div>
-                                
-                                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">
+                                    Submit Feedback
+                                </button>
                             </form>
                         </div>
+
                     </div>
                 </div>
             }

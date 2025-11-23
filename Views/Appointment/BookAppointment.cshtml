@@ -5,32 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <h2 class="my-4 text-center">Book a Training Session</h2>
+
+<div class="container py-5" style="margin-top:40px">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+        </div>
+    }
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
+        <div class="col-lg-5 col-md-7">
+
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-primary">Book a Training Session</h2>
+                <p class="text-muted">Choose your trainer and schedule your session</p>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
                     <form asp-action="BookAppointment" asp-controller="Appointment" method="post">
+
+                        <!-- Trainer Dropdown -->
                         <div class="mb-3">
-                            <label for="trainerId" class="form-label">Select Trainer</label>
-                            <select name="trainerId" class="form-select" required>
-                                <option value="">-- Select a Trainer --</option>
+                            <label for="trainerId" class="form-label d-block fw-semibold">Select Trainer</label>
+                            <select name="trainerId" id="trainerId" class="form-select form-select-lg" required>
+                                <option value="">-- Choose Trainer --</option>
                                 @foreach (var trainer in Model)
                                 {
-                                    <option value="@trainer.Id">@trainer.FirstName - @trainer.LastName</option>
+                                    <option value="@trainer.Id">@trainer.FirstName @trainer.LastName</option>
                                 }
                             </select>
                         </div>
 
+                        <!-- Date & Time -->
                         <div class="mb-3">
-                            <label for="date" class="form-label">Session Date & Time</label>
-                            <input type="datetime-local" name="date" class="form-control" required />
+                            <label for="date" class="form-label d-block fw-semibold">Session Date & Time</label>
+                            <input type="datetime-local" name="date" id="date" class="form-control form-control-lg" required />
                         </div>
 
+                        <!-- Session Type -->
                         <div class="mb-3">
-                            <label for="type" class="form-label">Session Type</label>
-                            <select name="type" class="form-select">
+                            <label for="type" class="form-label d-block fw-semibold">Session Type</label>
+                            <select name="type" id="type" class="form-select form-select-lg">
                                 <option value="General Workout">General Workout</option>
                                 <option value="Yoga">Yoga</option>
                                 <option value="Cardio">Cardio</option>
@@ -39,11 +56,15 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Book Session</button>
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold btn-lg">
+                            <i class="bi bi-calendar-check me-2"></i>Book Session
+                        </button>
+
                     </form>
+
                 </div>
             </div>
+
         </div>
     </div>
 </div>
-

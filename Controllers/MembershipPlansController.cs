@@ -33,7 +33,7 @@ namespace FitnessManagementSystem.Controllers
                 return NotFound();
 
             // Get current logged-in user Id
-            var userId = _userManager.GetUserId(User); // gets primary key Id
+            var userId = _userManager.GetUserId(User); 
 
             var options = new SessionCreateOptions
             {

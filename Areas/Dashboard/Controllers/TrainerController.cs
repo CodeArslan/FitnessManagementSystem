@@ -188,6 +188,26 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> MarkCompleted(int appointmentId)
+        {
+            var appointment = await _Context.Appointments
+                .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+
+            if (appointment == null)
+            {
+                TempData["Error"] = "Appointment not found.";
+                return RedirectToAction("Dashboard"); 
+            }
+
+            appointment.Status = "Completed";
+
+            _Context.Appointments.Update(appointment);
+            await _Context.SaveChangesAsync();
+
+            TempData["Success"] = "Appointment marked as completed.";
+            return RedirectToAction("Dashboard");
+        }
 
     }
 }

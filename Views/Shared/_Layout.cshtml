@@ -47,62 +47,84 @@
                         <!-- ***** Logo Start ***** -->
                         <a href="@Url.Action("Index", "Home")" class="logo">Training<em> Studio</em></a>
                         <!-- ***** Logo End ***** -->
-                        <ul class="nav">
-                            <li>
-                                <a href="@Url.Action("Index", "Home")"
-                                   class="@(currentAction == "Index" ? "active" : "")">
-                                    Home
-                                </a>
-                            </li>
+                   <ul class="nav">
+    <!-- Home -->
+    <li>
+        <a href="@Url.Action("Index", "Home", new { area = "" })"
+           class="@(currentAction == "Index" ? "active" : "")">
+            Home
+        </a>
+    </li>
 
-                            <!-- ▼ Separate dropdown menu ▼ -->
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer;">
-                                    Services <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
-                                    <li><a href="@Url.Action("Index", "Home")" style="background:none; border:none; color:white;">Progress</a></li>
-                                    <li><a href="@Url.Action("Index", "Home")" style="background:none; border:none; color:white;">Book Appointment</a></li>
-                                    <li><a href="@Url.Action("Index", "Home")" style="background:none; border:none; color:white;">Memberships</a></li>
-                                    <li><a href="@Url.Action("Index", "Home")" style="background:none; border:none; color:white;">Schedule</a></li>
-                                </ul>
-                            </li>
+    <!-- Services dropdown -->
+    <li class="dropdown @(User.Identity.IsAuthenticated ? "" : "disabled")">
+        <a href="#" class="dropdown-toggle @(User.Identity.IsAuthenticated ? "" : "text-muted")"
+           @(User.Identity.IsAuthenticated ? "data-toggle='dropdown'" : "onclick='return false;'")
+           style="cursor:pointer;">
+            Services <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
+            <li>
+                <a href="@Url.Action("ViewProgress", "LogWorkout", new { area = "" })" 
+                   style="background:none; border:none; color:white;">
+                    Progress
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("BookAppointment", "Appointment", new { area = "" })" 
+                   style="background:none; border:none; color:white;">
+                    Appointment
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "MembershipPlans", new { area = "" })" 
+                   style="background:none; border:none; color:white;">
+                    Plans
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("GiveFeedback", "Feedback", new { area = "" })" 
+                   style="background:none; border:none; color:white;">
+                    Feedback
+                </a>
+            </li>
+        </ul>
+    </li>
 
-                            <!-- ▼ Authenticated user menu ▼ -->
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        @User.Identity.Name <b class="caret"></b>
-                                    </a>
-                                    <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
-                                        <li><a href="/Dashboard" style="background:none; border:none; color:white;">Dashboard</a></li>
-                                        <li><a href="/Profile" style="background:none; border:none; color:white;">Profile</a></li>
-                                        <li>
-                                            <form method="post" asp-area="Identity" asp-page="/Account/Logout">
-                                                <button type="submit" class="dropdown-item"
-                                                        style="background:none; border:none; color:white;">
-                                                    Logout
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="main-button">
-                                    <a href="/Identity/Account/Login"
-                                       style="display:flex; align-items:center; justify-content:center; color:white;">
-                                        Log In
-                                    </a>
-                                </li>
+    <!-- Authenticated user menu -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                @User.Identity.Name <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
+                <li>
+                    <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                        <button type="submit" class="dropdown-item" 
+                                style="background:none; border:none; color:white;">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li class="main-button">
+            <a href="/Identity/Account/Login"
+               style="display:flex; align-items:center; justify-content:center; color:white;">
+                Log In
+            </a>
+        </li>
 
-                                <li class="main-button">
-                                    <a href="/Identity/Account/Register">Sign Up</a>
-                                </li>
-                            }
-                        </ul>
+        <li class="main-button">
+            <a href="/Identity/Account/Register">Sign Up</a>
+        </li>
+    }
+</ul>
+
 
                         <a class='menu-trigger'>
                             <span>Menu</span>
@@ -125,12 +147,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <p>
-                        Copyright &copy; @DateTime.Now.Year Training Studio
-
-                        - Designed by <a rel="nofollow" href="https://templatemo.com" class="tm-text-link" target="_parent">TemplateMo</a><br>
-
-                        Distributed by <a rel="nofollow" href="https://themewagon.com" class="tm-text-link" target="_blank">ThemeWagon</a>
-
+                        Copyright &copy; @DateTime.Now.Year Fitness Managemenet
                     </p>
                 </div>
             </div>
