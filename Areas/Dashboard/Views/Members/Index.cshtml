@@ -33,6 +33,7 @@
                     <th>Weight (kg)</th>
                     <th>Join Date</th>
                     <th>Fitness Goal</th>
+                    <th>Membership Plan</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -52,6 +53,11 @@
                             <td>@user.Weight</td>
                             <td>@user.JoinDate?.ToString("MM/dd/yyyy")</td>
                             <td>@user.FitnessGoal</td>
+                            <td>
+                                @(user.MembershipPlans != null
+                                                        ? user.MembershipPlans.PlanName
+                                                        : "No Plan")
+                            </td>
                             <td>
                                 <a asp-area="Dashboard" asp-controller="Members" asp-action="EditMember" asp-route-id="@user.Id"
                                    class="btn btn-sm btn-warning me-1">

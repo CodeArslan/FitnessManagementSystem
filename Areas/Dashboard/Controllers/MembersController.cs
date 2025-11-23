@@ -1,6 +1,7 @@
 ﻿using FitnessManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace FitnessManagementSystem.Areas.Dashboard.Controllers
@@ -17,7 +18,7 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var members = _userManager.Users.Where(u => u.Role == "Member").ToList();
+            var members = _userManager.Users.Where(u => u.Role == "Member").Include(c=>c.MembershipPlans).ToList();
             return View(members);
         }
         public IActionResult AddMember()

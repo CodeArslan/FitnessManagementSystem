@@ -23,14 +23,19 @@ namespace FitnessManagementSystem.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Challenge();
 
-            // Get completed appointments to rate
+            var feedbackGivenIds = await _context.Feedbacks
+                .Select(f => f.AppointmentId)
+                .ToListAsync();
             var completedAppointments = await _context.Appointments
                 .Include(a => a.Trainer)
-                .Where(a => a.UserId == user.Id && a.Status == "Completed") // Assuming "Completed" status exists
+                .Where(a => a.UserId == user.Id
+                            && a.Status == "Completed"
+                            && !feedbackGivenIds.Contains(a.AppointmentId))
                 .ToListAsync();
 
             return View(completedAppointments);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> GiveFeedback(int appointmentId, int rating, string comment)
@@ -54,7 +59,7 @@ namespace FitnessManagementSystem.Controllers
             _context.Feedbacks.Add(feedback);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("GiveFeedback");
         }
     }
 }

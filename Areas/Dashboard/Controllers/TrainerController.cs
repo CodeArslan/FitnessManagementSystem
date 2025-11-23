@@ -1,6 +1,8 @@
-﻿using FitnessManagementSystem.Models;
+﻿using FitnessManagementSystem.Data;
+using FitnessManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace FitnessManagementSystem.Areas.Dashboard.Controllers
@@ -9,12 +11,28 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
     public class TrainerController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _Context;
 
-        public TrainerController(UserManager<ApplicationUser> userManager)
+        public TrainerController(UserManager<ApplicationUser> userManager,ApplicationDbContext context)
         {
             _userManager = userManager;
+            _Context = context;
         }
+        // -------------------- Dashboard (List Trainers) --------------------
+        public async Task<IActionResult> Dashboard()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
 
+            // Fetch upcoming appointments
+            var appointments = await _Context.Appointments
+                .Include(a => a.User)
+                .Where(a => a.TrainerId == user.Id && a.Status == "Pending")
+                .OrderBy(a => a.SessionDate)
+                .ToListAsync();
+
+            return View(appointments);
+        }
         // -------------------- INDEX (List Trainers) --------------------
         public async Task<IActionResult> Index()
         {

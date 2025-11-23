@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FitnessManagementSystem.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Trainer Dashboard";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2 class="my-4">Trainer Dashboard</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <a asp-action="ManageWorkoutPlan" class="btn btn-primary mb-2">Create Workout Plan</a>
+                    <a asp-action="ManageDietPlan" class="btn btn-success mb-2">Create Diet Plan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Upcoming Appointments</h3>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No upcoming appointments.</div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.User.UserName <a asp-action="ViewMemberProgress" asp-route-memberId="@item.UserId" class="btn btn-sm btn-info">View Progress</a></td>
+                        <td>@item.SessionDate</td>
+                        <td>@item.SessionType</td>
+                        <td>@item.Status</td>
+                        <td>
+                            <form asp-action="MarkAttendance" method="post" class="d-inline">
+                                <input type="hidden" name="appointmentId" value="@item.AppointmentId" />
+                                <button type="submit" name="status" value="Completed" class="btn btn-sm btn-success">Mark Completed</button>
+                                <button type="submit" name="status" value="NoShow" class="btn btn-sm btn-danger">Mark No-Show</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

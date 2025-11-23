@@ -113,11 +113,11 @@
                     </a>
                     <a href="@Url.Action("Index", "Trainer")" class="list-group-item list-group-item-action">💪 Manage Trainers</a>
                     <a href="@Url.Action("Index", "TrainerScheduling")" class="list-group-item list-group-item-action">🗓 Trainer Scheduling</a>
-                    <a href="@Url.Action("MonitorFeedback", "Admin")" class="list-group-item list-group-item-action">⭐ Monitor Feedback</a>
+                    <a href="@Url.Action("Index", "Feedback")" class="list-group-item list-group-item-action">⭐ Monitor Feedback</a>
                 }
                 else if (userRole.Equals("Trainer", StringComparison.OrdinalIgnoreCase))
                 {
-                    <a href="@Url.Action("Index", "Trainer")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
+                    <a href="@Url.Action("Dashboard", "Trainer")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
                     <a href="@Url.Action("Index", "Plan")" class="list-group-item list-group-item-action">🏋 Workout Plans</a>
                     <a href="@Url.Action("Index", "Attendance")" class="list-group-item list-group-item-action">📋 Attendance</a>
                     <a href="@Url.Action("ClassScheduling", "Trainer")" class="list-group-item list-group-item-action">🗓 Class Scheduling</a>
