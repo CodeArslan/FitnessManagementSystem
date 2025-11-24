@@ -7,6 +7,7 @@ using Stripe.Checkout;
 
 namespace FitnessManagementSystem.Controllers
 {
+    [Authorize]
     public class MembershipPlansController : Controller
     {
         private readonly ApplicationDbContext _context;

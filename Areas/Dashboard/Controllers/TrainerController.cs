@@ -1,5 +1,6 @@
 ﻿using FitnessManagementSystem.Data;
 using FitnessManagementSystem.Models;
+using FitnessManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -208,6 +209,93 @@ namespace FitnessManagementSystem.Areas.Dashboard.Controllers
             TempData["Success"] = "Appointment marked as completed.";
             return RedirectToAction("Dashboard");
         }
+        [HttpGet]
+        public async Task<IActionResult> ManageAvailability()
+        {
+            var trainer = await _userManager.GetUserAsync(User);
+            if (trainer == null) return Challenge();
 
+            var availabilities = await _Context.TrainerAvailabilitys
+                .Where(a => a.TrainerId == trainer.Id)
+                .OrderBy(a => a.DayOfWeek)
+                .ThenBy(a => a.StartTime)
+                .ToListAsync();
+
+            return View(availabilities);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAvailability(DayOfWeek dayOfWeek, TimeSpan startTime, TimeSpan endTime)
+        {
+            var trainer = await _userManager.GetUserAsync(User);
+            if (trainer == null) return Challenge();
+
+            var availability = new TrainerAvailability
+            {
+                TrainerId = trainer.Id,
+                DayOfWeek = dayOfWeek,
+                StartTime = startTime,
+                EndTime = endTime
+            };
+
+            _Context.TrainerAvailabilitys.Add(availability);
+            await _Context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ManageAvailability));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAvailability(int id)
+        {
+            var availability = await _Context.TrainerAvailabilitys.FindAsync(id);
+            if (availability != null)
+            {
+                var trainer = await _userManager.GetUserAsync(User);
+                if (trainer != null && availability.TrainerId == trainer.Id)
+                {
+                    _Context.TrainerAvailabilitys.Remove(availability);
+                    await _Context.SaveChangesAsync();
+                }
+            }
+            return RedirectToAction(nameof(ManageAvailability));
+        }
+        [HttpGet]
+        public async Task<IActionResult> ViewMemberProgress()
+        {
+            // Get the latest workout session to extract the UserId
+            var lastSession = await _Context.WorkoutSessions
+                .OrderByDescending(w => w.SessionDate)
+                .FirstOrDefaultAsync();
+
+            if (lastSession == null)
+            {
+                ViewBag.MemberName = "Member";
+                return View(new MemberProgressViewModel());
+            }
+
+            string memberId = lastSession.UserId; 
+
+            var member = await _userManager.FindByIdAsync(memberId);
+
+            var progressRecords = await _Context.ProgressRecords
+                .Where(r => r.UserId == memberId)
+                .OrderByDescending(r => r.RecordedAt)
+                .ToListAsync();
+
+            var workoutSessions = await _Context.WorkoutSessions
+                .Where(w => w.UserId == memberId)
+                .OrderByDescending(w => w.SessionDate)
+                .ToListAsync();
+
+            ViewBag.MemberName = $"{member?.FirstName} {member?.LastName}".Trim();
+
+            var viewModel = new MemberProgressViewModel
+            {
+                ProgressRecords = progressRecords,
+                WorkoutSessions = workoutSessions
+            };
+
+            return View(viewModel);
+        }
     }
 }

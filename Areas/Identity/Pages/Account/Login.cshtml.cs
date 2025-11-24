@@ -136,7 +136,7 @@ namespace FitnessManagementSystem.Areas.Identity.Pages.Account
                         switch (roleFromDb)
                         {
                             case "Admin":
-                                return RedirectToAction("Index", "Admin", new { area = "Dashboard" });
+                                return RedirectToAction("AddMember", "Member", new { area = "Dashboard" });
                             case "Trainer":
                                 return RedirectToAction("Dashboard", "Trainer", new { area = "Dashboard" });
                             default: // Member or any other role

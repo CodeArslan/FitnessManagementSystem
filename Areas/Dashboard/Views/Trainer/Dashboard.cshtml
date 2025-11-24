@@ -31,8 +31,10 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Quick Actions</h5>
-                    <a asp-action="ManageWorkoutPlan" class="btn btn-primary mb-2">Create Workout Plan</a>
-                    <a asp-action="ManageDietPlan" class="btn btn-success mb-2">Create Diet Plan</a>
+                    <a asp-action="Index" asp-controller="Plan" asp-area="Dashboard" class="btn btn-primary mb-2">Create Workout Plan</a>
+                    <a asp-action="Index" asp-controller="Attendance" asp-area="Dashboard" class="btn btn-success mb-2">Attendance</a>
+                    <a asp-action="ManageAvailability" asp-controller="Trainer" asp-area="Dashboard" class="btn btn-success mb-2">Update Schedule</a>
+                    <a asp-action="ViewMemberProgress" asp-controller="Trainer" asp-area="Dashboard" class="btn btn-success mb-2">View Member Progress</a>
                 </div>
             </div>
         </div>

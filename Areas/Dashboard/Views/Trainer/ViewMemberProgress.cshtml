@@ -2,19 +2,23 @@
 
 @{
     ViewData["Title"] = "Member Progress";
+    Layout = "~/Areas/Dashboard/Views/_Layout.cshtml";
 }
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js" integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <div class="container">
     <h2 class="my-4">Progress for @ViewBag.MemberName</h2>
 
     <ul class="nav nav-tabs" id="progressTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="workouts-tab" data-toggle="tab" href="#workouts" role="tab" aria-controls="workouts" aria-selected="true">Workout History</a>
+            <a class="nav-link active" id="workouts-tab" data-bs-toggle="tab" href="#workouts"
+               role="tab" aria-controls="workouts" aria-selected="true">Workout History</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Body Stats</a>
+            <a class="nav-link" id="stats-tab" data-bs-toggle="tab" href="#stats"
+               role="tab" aria-controls="stats" aria-selected="false">Body Stats</a>
         </li>
     </ul>
+
 
     <div class="tab-content mt-3" id="progressTabContent">
         <!-- Workout History Tab -->

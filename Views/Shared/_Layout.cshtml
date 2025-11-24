@@ -1,6 +1,22 @@
-﻿@{
+﻿@using FitnessManagementSystem.Data
+@using Microsoft.AspNetCore.Identity
+@inject ApplicationDbContext _context
+@{
     var currentAction = ViewContext.RouteData.Values["action"] as string;
     var currentController = ViewContext.RouteData.Values["controller"] as string;
+    var userName = User.Identity.Name ?? "Guest";
+    var userRole = "";
+
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+        if (user != null)
+        {
+            userRole = user.Role ?? "";
+        }
+    }
+
+    bool isMember = User.Identity.IsAuthenticated && userRole == "Member";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -56,42 +72,42 @@
         </a>
     </li>
 
-    <!-- Services dropdown -->
-    <li class="dropdown @(User.Identity.IsAuthenticated ? "" : "disabled")">
-        <a href="#" class="dropdown-toggle @(User.Identity.IsAuthenticated ? "" : "text-muted")"
-           @(User.Identity.IsAuthenticated ? "data-toggle='dropdown'" : "onclick='return false;'")
-           style="cursor:pointer;">
-            Services <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
-            <li>
-                <a href="@Url.Action("ViewProgress", "LogWorkout", new { area = "" })" 
-                   style="background:none; border:none; color:white;">
-                    Progress
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("BookAppointment", "Appointment", new { area = "" })" 
-                   style="background:none; border:none; color:white;">
-                    Appointment
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "MembershipPlans", new { area = "" })" 
-                   style="background:none; border:none; color:white;">
-                    Plans
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("GiveFeedback", "Feedback", new { area = "" })" 
-                   style="background:none; border:none; color:white;">
-                    Feedback
-                </a>
-            </li>
-        </ul>
-    </li>
+                            @* Only show the dropdown if the user is a member *@
+                            @if (isMember)
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer;">
+                                        Services <b class="caret"></b>
+                                    </a>
 
-    <!-- Authenticated user menu -->
+                                    <ul class="dropdown-menu" style="background:#1a1a1a; padding:10px;">
+                                        <li>
+                                            <a href="@Url.Action("ViewProgress", "LogWorkout", new { area = "" })" style="color:white;">
+                                                Progress
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="@Url.Action("BookAppointment", "Appointment", new { area = "" })" style="color:white;">
+                                                Appointment
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="@Url.Action("Index", "MembershipPlans", new { area = "" })" style="color:white;">
+                                                Plans
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="@Url.Action("GiveFeedback", "Feedback", new { area = "" })" style="color:white !important;">
+                                                Feedback
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            <!-- Authenticated user menu -->
     @if (User.Identity.IsAuthenticated)
     {
         <li class="dropdown">

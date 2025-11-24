@@ -107,26 +107,54 @@
             <div class="list-group list-group-flush">
                 @if (userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
                 {
-                    <a href="@Url.Action("Index", "Admin")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
-                    <a href="@Url.Action("Index", "Members", new { area = "Dashboard" })" class="list-group-item list-group-item-action">
+                    <a href="@Url.Action("Index", "Members", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
                         👥 Manage Members
                     </a>
-                    <a href="@Url.Action("Index", "Trainer")" class="list-group-item list-group-item-action">💪 Manage Trainers</a>
-                    <a href="@Url.Action("Index", "TrainerScheduling")" class="list-group-item list-group-item-action">🗓 Trainer Scheduling</a>
-                    <a href="@Url.Action("Index", "Feedback")" class="list-group-item list-group-item-action">⭐ Monitor Feedback</a>
+
+                    <a href="@Url.Action("Index", "Trainer", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        💪 Manage Trainers
+                    </a>
+
+                    <a href="@Url.Action("Index", "TrainerScheduling", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        🗓 Trainer Scheduling
+                    </a>
+
+                    <a href="@Url.Action("Index", "Feedback", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        ⭐ Monitor Feedback
+                    </a>
                 }
                 else if (userRole.Equals("Trainer", StringComparison.OrdinalIgnoreCase))
                 {
-                    <a href="@Url.Action("Dashboard", "Trainer")" class="list-group-item list-group-item-action">🏠 Dashboard</a>
-                    <a href="@Url.Action("Index", "Plan")" class="list-group-item list-group-item-action">🏋 Workout Plans</a>
-                    <a href="@Url.Action("Index", "Attendance")" class="list-group-item list-group-item-action">📋 Attendance</a>
-                    <a href="@Url.Action("ClassScheduling", "Trainer")" class="list-group-item list-group-item-action">🗓 Class Scheduling</a>
-                    <a href="@Url.Action("MemberProgress", "Trainer")" class="list-group-item list-group-item-action">📈 Member Progress</a>
+                    <a href="@Url.Action("Dashboard", "Trainer", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        🏠 Dashboard
+                    </a>
+
+                    <a href="@Url.Action("Index", "Plan", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        🏋 Workout Plans
+                    </a>
+
+                    <a href="@Url.Action("Index", "Attendance", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        📋 Attendance
+                    </a>
+
+                    <a href="@Url.Action("ManageAvailability", "Trainer", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        🗓 Update Availability
+                    </a>
+
+                    <a href="@Url.Action("ViewMemberProgress", "Trainer", new { area = "Dashboard" })"
+                       class="list-group-item list-group-item-action">
+                        📈 Member Progress
+                    </a>
                 }
-                else
-                {
-                    <a href="@Url.Action("Index", "Home")" class="list-group-item list-group-item-action">🏠 Home</a>
-                }
+
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -142,11 +170,22 @@
                             <span class="me-3 user-info">
                                 👤 @userName (@userRole)
                             </span>
-                            <a asp-action="Logout" asp-controller="Account" asp-area="Identity" class="btn btn-outline-danger btn-sm">Logout</a>
+                            <form asp-area="Identity"
+                                  asp-page="/Account/Logout"
+                                  method="post"
+                                  id="logoutForm">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    Logout
+                                </button>
+                            </form>
                         }
                         else
                         {
-                            <a asp-action="Login" asp-controller="Account" asp-area="Identity" class="btn btn-outline-success btn-sm">Login</a>
+                            <a asp-area="Identity"
+                               asp-page="/Account/Login"
+                               class="btn btn-outline-success btn-sm">
+                                Login
+                            </a>
                         }
                     </div>
                 </div>
